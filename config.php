@@ -37,7 +37,7 @@ $settings = [
         ],
         'download'=>[
             'report_broken_media' => false,
-        ]
+        ],
     ],
 ];
 

@@ -13,7 +13,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
     public function __construct($MadelineProto)
     {
-        $this->startTime = strtotime('-5 minute');
+        $this->startTime = strtotime('-30 minute');
         parent::__construct($MadelineProto);
     }
     public function onUpdateSomethingElse($update)
@@ -61,7 +61,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         foreach (static::$recipients as $peer) {
             $this->logger(date('Y-m-d H:i:s') . " forwarding message to {$peer}", Logger::WARNING);
             $this->messages->forwardMessages([
-                'from_peer' => $update['message']['from_id'],
+                'from_peer' => $update,
                 'id' => [$update['message']['id']],
                 'to_peer' => $peer,
             ]);
