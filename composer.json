@@ -1,0 +1,25 @@
+{
+  "name": "xtrime-ru/telegranrepost",
+  "description": "Repost messages",
+  "type": "project",
+  "license": "MIT",
+  "keywords": ["telegram", "parser", "repost"],
+  "require": {
+    "php": ">=7.3.0",
+    "ext-json": "*"
+  },
+  "authors": [
+    {
+      "name": "Alexander Pankratov",
+      "email": "alexander@i-c-a.su"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "TelegramRepost\\": "app/"
+    },
+    "files": [
+      "madeline.php"
+    ]
+  }
+}
