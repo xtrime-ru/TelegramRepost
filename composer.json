@@ -6,8 +6,10 @@
   "keywords": ["telegram", "parser", "repost"],
   "require": {
     "php": ">=7.3.0",
-    "ext-json": "*"
+    "ext-json": "*",
+    "danog/madelineproto":"^5"
   },
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Alexander Pankratov",
@@ -17,9 +19,6 @@
   "autoload": {
     "psr-4": {
       "TelegramRepost\\": "app/"
-    },
-    "files": [
-      "madeline.php"
-    ]
+    }
   }
 }
