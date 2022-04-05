@@ -1,0 +1,35 @@
+version: '2.4'
+x-logging:
+  &default-logging
+  driver: json-file
+  options:
+    max-size: '100k'
+    max-file: '2'
+
+services:
+  tg-repost:
+    container_name: tg-repost
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/app-host-link
+    working_dir: /app-host-link
+    depends_on:
+      - mysql
+    environment:
+      WAIT_HOSTS: mysql:3306
+    logging: *default-logging
+  mysql:
+    image: mariadb:10.7
+    container_name: tg-repost-mysql
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:10306:3306"
+    volumes:
+      - ./.mysql:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    command: ["mysqld", "--innodb-buffer-pool-size=16M"]
+    logging: *default-logging

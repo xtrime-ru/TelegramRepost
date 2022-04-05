@@ -4,25 +4,25 @@
 namespace TelegramRepost;
 
 use danog\MadelineProto\Logger;
+use function date;
+use function json_encode;
+use function preg_match;
 
 class EventHandler extends \danog\MadelineProto\EventHandler
 {
-    private $startTime = 0;
-    public static $recipients = [];
-    public static $keywords = [];
+    private int $startTime = 0;
+    public static array $recipients = [];
+    public static array $keywords = [];
 
-    public function __construct($MadelineProto)
+    public function onStart()
     {
         $this->startTime = strtotime('-30 minute');
-        parent::__construct($MadelineProto);
+        Logger::log('Event handler started');
     }
-    public function onUpdateSomethingElse($update)
-    {
-        // See the docs for a full list of updates: http://docs.madelineproto.xyz/API_docs/types/Update.html
-    }
+
     public function onUpdateNewChannelMessage($update)
     {
-        yield $this->onUpdateNewMessage($update);
+        $this->onUpdateNewMessage($update);
     }
     public function onUpdateNewMessage($update)
     {
