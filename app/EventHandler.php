@@ -25,7 +25,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     {
         $this->startTime = strtotime('-30 minute');
         foreach (self::$sources as $source) {
-            $id = yield $this->getId($source);
+            $peer = yield $this->getInfo($source);
+            $id = $peer['bot_api_id'];
+            if (!is_int($id)) {
+                throw new \InvalidArgumentException("Cant get source peer id: {$source}");
+            }
             self::$sourcesIds[$id] = null;
             Logger::log("Monitoring peer: {$source}; #{$id}");
         }
@@ -51,8 +55,10 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
-        if (!empty(self::$sourcesIds) && !array_key_exists($this->getId($update['message']['peer_id']), self::$sourcesIds)) {
-            $this->logger('Skip forwarding message from wrong peer_id: ' . $this->getId($update['message']['peer_id']));
+        $peerId = yield $this->getId($update['message']['peer_id']);
+        $fromId = yield $this->getId($update['message']['from_id']);
+        if (!empty(self::$sourcesIds) && !array_key_exists($peerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
+            $this->logger('Skip forwarding message from wrong peer_id :  ' . json_encode($update, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
             return;
         }
 
@@ -74,7 +80,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         $res = json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
-        $this->logger($res, Logger::NOTICE);
+        $this->logger('Forwarding message: ' . $res, Logger::NOTICE);
 
         foreach (static::$recipients as $peer) {
             $this->logger(date('Y-m-d H:i:s') . " forwarding message to {$peer}", Logger::WARNING);
