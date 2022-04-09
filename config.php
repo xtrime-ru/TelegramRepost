@@ -1,6 +1,11 @@
 <?php
 
 $settings = [
+    'sources' => array_filter(
+        array_map('trim',
+            explode(',', getenv('SOURCES'))
+        )
+    ),
     'recipients' => array_filter(
         array_map('trim',
             explode(',', getenv('RECIPIENTS'))

@@ -10,13 +10,25 @@ use function preg_match;
 
 class EventHandler extends \danog\MadelineProto\EventHandler
 {
-    private int $startTime = 0;
+    /** @var string[] */
+    public static array $sources = [];
+    /** @var string[] */
     public static array $recipients = [];
+    /** @var string[] */
     public static array $keywords = [];
+
+    private int $startTime = 0;
+    /** @var array<int, null> */
+    private static array $sourcesIds = [];
 
     public function onStart()
     {
         $this->startTime = strtotime('-30 minute');
+        foreach (self::$sources as $source) {
+            $id = yield $this->getId($source);
+            self::$sourcesIds[$id] = null;
+            Logger::log("Monitoring peer: {$source}; #{$id}");
+        }
         Logger::log('Event handler started');
     }
 
@@ -35,6 +47,10 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 'Skip message with date: ' . date('Y-m-d H:i:s', $update['message']['date']),
                 Logger::WARNING
             );
+            return;
+        }
+
+        if (!empty(self::$sourcesIds) && !array_key_exists($this->getId($update['message']['peer_id']), self::$sourcesIds)) {
             return;
         }
 
