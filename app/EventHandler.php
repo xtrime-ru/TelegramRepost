@@ -4,26 +4,39 @@
 namespace TelegramRepost;
 
 use danog\MadelineProto\Logger;
+use function date;
+use function json_encode;
+use function preg_match;
 
 class EventHandler extends \danog\MadelineProto\EventHandler
 {
-    private $startTime = 0;
-    public static $recipients = [];
-    public static $keywords = [];
+    /** @var string[] */
+    public static array $sources = [];
+    /** @var string[] */
+    public static array $recipients = [];
+    /** @var string[] */
+    public static array $keywords = [];
 
-    public function __construct($MadelineProto)
+    private int $startTime = 0;
+    /** @var array<int, null> */
+    private static array $sourcesIds = [];
+
+    public function onStart()
     {
         $this->startTime = strtotime('-30 minute');
-        parent::__construct($MadelineProto);
+        foreach (self::$sources as $source) {
+            $id = yield $this->getId($source);
+            self::$sourcesIds[$id] = null;
+            Logger::log("Monitoring peer: {$source}; #{$id}");
+        }
+        Logger::log('Event handler started');
     }
-    public function onUpdateSomethingElse($update)
-    {
-        // See the docs for a full list of updates: http://docs.madelineproto.xyz/API_docs/types/Update.html
-    }
+
     public function onUpdateNewChannelMessage($update)
     {
-        yield $this->onUpdateNewMessage($update);
+        $this->onUpdateNewMessage($update);
     }
+
     public function onUpdateNewMessage($update)
     {
         if (isset($update['message']['out']) && $update['message']['out']) {
@@ -35,6 +48,10 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 'Skip message with date: ' . date('Y-m-d H:i:s', $update['message']['date']),
                 Logger::WARNING
             );
+            return;
+        }
+
+        if (!empty(self::$sourcesIds) && !array_key_exists($this->getId($update['message']['peer_id']), self::$sourcesIds)) {
             return;
         }
 

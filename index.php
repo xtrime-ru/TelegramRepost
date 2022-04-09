@@ -1,21 +1,23 @@
 <?php
 
+use TelegramRepost\EventHandler;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
-$dotenv = \Dotenv\Dotenv::create(__DIR__);
-$dotenv->load();
+Dotenv\Dotenv::createImmutable(__DIR__, '.env')->load();
 
 $settings = require('config.php');
-$session = __DIR__ . '/session.madeline';
 
-$madelineProto = new danog\MadelineProto\API($session, $settings['telegram']);
+$madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);
+$madelineProto->setEventHandler(EventHandler::class);
 $madelineProto->async(true);
 
-\TelegramRepost\EventHandler::$recipients = $settings['recipients'];
-\TelegramRepost\EventHandler::$keywords = $settings['keywords'];
+EventHandler::$sources = $settings['sources'];
+EventHandler::$recipients = $settings['recipients'];
+EventHandler::$keywords = $settings['keywords'];
 
-$madelineProto->loop(static function() use($madelineProto){
-        yield $madelineProto->start();
-        yield $madelineProto->setEventHandler(\TelegramRepost\EventHandler::class);
+$madelineProto->setEventHandler(EventHandler::class);
+$madelineProto->loop(static function () use ($madelineProto) {
+    yield $madelineProto->start();
 });
 $madelineProto->loop();

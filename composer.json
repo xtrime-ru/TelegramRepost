@@ -5,11 +5,13 @@
   "license": "MIT",
   "keywords": ["telegram", "parser", "repost"],
   "require": {
-    "php": ">=7.3.0",
+    "php": "~8.1.0",
     "ext-json": "*",
-    "danog/madelineproto":"^5"
+    "danog/madelineproto":"^7.0.59",
+    "vlucas/phpdotenv": "^4"
   },
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "authors": [
     {
       "name": "Alexander Pankratov",
