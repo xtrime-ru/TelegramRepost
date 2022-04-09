@@ -17,7 +17,7 @@ EventHandler::$recipients = $settings['recipients'];
 EventHandler::$keywords = $settings['keywords'];
 
 $madelineProto->setEventHandler(EventHandler::class);
-$madelineProto->loop(static function() use($madelineProto) {
-        yield $madelineProto->start();
+$madelineProto->loop(static function () use ($madelineProto) {
+    yield $madelineProto->start();
 });
 $madelineProto->loop();

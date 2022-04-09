@@ -36,6 +36,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     {
         $this->onUpdateNewMessage($update);
     }
+
     public function onUpdateNewMessage($update)
     {
         if (isset($update['message']['out']) && $update['message']['out']) {
