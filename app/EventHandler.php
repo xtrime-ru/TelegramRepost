@@ -52,6 +52,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         if (!empty(self::$sourcesIds) && !array_key_exists($this->getId($update['message']['peer_id']), self::$sourcesIds)) {
+            $this->logger('Skip forwarding message from wrong peer_id: ' . $this->getId($update['message']['peer_id']));
             return;
         }
 
