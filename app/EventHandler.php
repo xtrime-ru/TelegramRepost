@@ -43,6 +43,9 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
     public function onUpdateNewMessage($update)
     {
+        $res = json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
+        $this->logger('Update: ' . $res, Logger::NOTICE);
+
         if (isset($update['message']['out']) && $update['message']['out']) {
             return;
         }
@@ -58,11 +61,12 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         $peerId = yield $this->getId($update['message']['peer_id']);
         $fromId = yield $this->getId($update['message']['from_id']);
         if (!empty(self::$sourcesIds) && !array_key_exists($peerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
-            $this->logger('Skip forwarding message from wrong peer_id :  ' . json_encode($update, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
+            $this->logger('Skip forwarding message from wrong peer_id');
             return;
         }
 
         if (empty($update['message']['message'])) {
+            $this->logger('Skip empty message');
             return;
         }
 
@@ -78,9 +82,6 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             $this->logger(date('Y-m-d H:i:s', $update['message']['date']) . ' - no matches', Logger::WARNING);
             return;
         }
-
-        $res = json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
-        $this->logger('Forwarding message: ' . $res, Logger::NOTICE);
 
         foreach (static::$recipients as $peer) {
             $this->logger(date('Y-m-d H:i:s') . " forwarding message to {$peer}", Logger::WARNING);
