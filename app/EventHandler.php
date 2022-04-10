@@ -38,7 +38,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
     public function onUpdateNewChannelMessage($update)
     {
-        $this->onUpdateNewMessage($update);
+        return $this->onUpdateNewMessage($update);
     }
 
     public function onUpdateNewMessage($update)
@@ -59,7 +59,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         $peerId = yield $this->getId($update['message']['peer_id']);
-        $fromId = yield $this->getId($update['message']['from_id']);
+        $fromId = array_key_exists('from_id', $update['message']) ? yield $this->getId($update['message']['from_id']) : null;
         if (!empty(self::$sourcesIds) && !array_key_exists($peerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
             $this->logger('Skip forwarding message from wrong peer_id');
             return;
