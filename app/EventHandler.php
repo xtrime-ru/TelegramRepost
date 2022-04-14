@@ -72,7 +72,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
         $matches = 0;
         foreach (static::$keywords as $keyword) {
-            $matches += preg_match("~{$keyword}~i", $update['message']['message']);
+            $matches += preg_match("~{$keyword}~iuS", $update['message']['message']);
             if ($matches > 0) {
                 break;
             }
