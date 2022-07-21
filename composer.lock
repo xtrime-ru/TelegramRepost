@@ -2028,16 +2028,16 @@
         },
         {
             "name": "danog/madelineproto",
-            "version": "7.0.100.9999",
+            "version": "7.0.101.9999",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/MadelineProto.git",
-                "reference": "b3e39739d1340ddc3d0f89522bafe1143da3bf20"
+                "reference": "01a652b3ac71ab99ca178b1417aa774e3c76a8e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/b3e39739d1340ddc3d0f89522bafe1143da3bf20",
-                "reference": "b3e39739d1340ddc3d0f89522bafe1143da3bf20",
+                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/01a652b3ac71ab99ca178b1417aa774e3c76a8e3",
+                "reference": "01a652b3ac71ab99ca178b1417aa774e3c76a8e3",
                 "shasum": ""
             },
             "require": {
@@ -2072,7 +2072,7 @@
                 "php-64bit": ">=8.0",
                 "phpseclib/phpseclib": "^3",
                 "psr/http-factory": "^1.0",
-                "psr/log": "^1",
+                "psr/log": "^1|^2|^3",
                 "symfony/polyfill-mbstring": "*",
                 "symfony/polyfill-php80": "^1.18",
                 "webmozart/assert": "^1.11"
@@ -2082,7 +2082,7 @@
                 "krakjoe/pthreads-polyfill": "*"
             },
             "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.4",
+                "bamarni/composer-bin-plugin": "1.5.0",
                 "danog/phpdoc": "^0.1.7",
                 "ext-ctype": "*",
                 "phabel/phabel": "^1",
@@ -2141,7 +2141,7 @@
             ],
             "support": {
                 "issues": "https://github.com/danog/MadelineProto/issues",
-                "source": "https://github.com/danog/MadelineProto/tree/7.0.100.9999"
+                "source": "https://github.com/danog/MadelineProto/tree/7.0.101.9999"
             },
             "funding": [
                 {
@@ -2149,7 +2149,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-06-25T19:51:59+00:00"
+            "time": "2022-07-18T12:41:49+00:00"
         },
         {
             "name": "danog/magicalserializer",
@@ -3207,30 +3207,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.4",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
-                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=8.0.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
+                    "Psr\\Log\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3251,9 +3251,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/1.1.4"
+                "source": "https://github.com/php-fig/log/tree/3.0.0"
             },
-            "time": "2021-05-03T11:20:27+00:00"
+            "time": "2021-07-14T16:46:02+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

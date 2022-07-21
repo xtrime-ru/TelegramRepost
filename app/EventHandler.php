@@ -25,11 +25,17 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     {
         $this->startTime = strtotime('-30 minute');
         foreach (self::$sources as $source) {
-            $peer = yield $this->getInfo($source);
-            $id = $peer['bot_api_id'];
-            if (!is_int($id)) {
-                throw new \InvalidArgumentException("Cant get source peer id: {$source}");
+            try {
+                $peer = yield $this->getInfo($source);
+                $id = $peer['bot_api_id'];
+                if (!is_int($id)) {
+                    throw new \InvalidArgumentException("Cant get source peer id: {$source}");
+                }
+            } catch (\Throwable $e) {
+                Logger::log("Cant monitor updates from: {$source}; Error: {$e->getMessage()}", Logger::ERROR);
+                continue;
             }
+
             self::$sourcesIds[$id] = null;
             Logger::log("Monitoring peer: {$source}; #{$id}");
         }
