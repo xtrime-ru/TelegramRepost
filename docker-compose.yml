@@ -22,7 +22,7 @@ services:
       WAIT_HOSTS: mysql:3306
     logging: *default-logging
   mysql:
-    image: mariadb:10.7
+    image: mariadb:10.8
     container_name: tg-repost-mysql
     restart: unless-stopped
     ports:
@@ -31,5 +31,6 @@ services:
       - ./.mysql:/var/lib/mysql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MARIADB_AUTO_UPGRADE: "1"
     command: ["mysqld", "--innodb-buffer-pool-size=16M"]
     logging: *default-logging
