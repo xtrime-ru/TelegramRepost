@@ -18,6 +18,7 @@ $madelineProto->async(true);
 EventHandler::$sources = $settings['sources'];
 EventHandler::$recipients = $settings['recipients'];
 EventHandler::$keywords = $settings['keywords'];
+EventHandler::$onlineStatus = $settings['online_status'];
 
 $madelineProto->loop(static function () use ($madelineProto) {
     $madelineProto->setEventHandler(EventHandler::class);

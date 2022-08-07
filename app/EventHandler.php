@@ -3,6 +3,7 @@
 
 namespace TelegramRepost;
 
+use Amp\Loop;
 use danog\MadelineProto\Logger;
 use function date;
 use function json_encode;
@@ -16,6 +17,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     public static array $recipients = [];
     /** @var string[] */
     public static array $keywords = [];
+
+    public static bool $onlineStatus = false;
 
     private int $startTime = 0;
     /** @var array<int, null> */
@@ -39,6 +42,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             self::$sourcesIds[$id] = null;
             Logger::log("Monitoring peer: {$source}; #{$id}");
         }
+
+        if (self::$onlineStatus) {
+            Loop::repeat(60, fn() => $this->account->updateStatus(['offline' => false]));
+        }
+
         Logger::log('Event handler started');
     }
 

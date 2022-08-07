@@ -16,6 +16,7 @@ $settings = [
             explode(',', getenv('KEYWORDS'))
         )
     ),
+    'online_status' => (bool)getenv('ONLINE_STATUS'),
     'telegram' => [
         'app_info' => [ // obtained in https://my.telegram.org
             'api_id' => (int)getenv('TELEGRAM_API_ID'),
