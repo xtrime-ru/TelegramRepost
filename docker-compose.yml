@@ -1,4 +1,3 @@
-version: '2.4'
 x-logging:
   &default-logging
   driver: json-file
@@ -8,10 +7,7 @@ x-logging:
 
 services:
   tg-repost:
-    container_name: tg-repost
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: xtrime/telegram-api-server
     restart: unless-stopped
     volumes:
       - ./:/app-host-link
@@ -23,14 +19,13 @@ services:
     logging: *default-logging
   mysql:
     image: mariadb:10.8
-    container_name: tg-repost-mysql
     restart: unless-stopped
     ports:
       - "127.0.0.1:10306:3306"
     volumes:
       - ./.mysql:/var/lib/mysql
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MARIADB_AUTO_UPGRADE: "1"
-    command: ["mysqld", "--innodb-buffer-pool-size=16M"]
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+      MARIADB_AUTO_UPGRADE: 'yes'
+    command: ["mysqld", "--innodb-buffer-pool-size=32M", "--wait_timeout=65", "--skip-grant-tables"]
     logging: *default-logging

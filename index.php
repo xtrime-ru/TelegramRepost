@@ -1,5 +1,6 @@
 <?php
 
+use danog\MadelineProto\APIWrapper;
 use TelegramRepost\EventHandler;
 
 if (!is_file(__DIR__ . '/vendor/autoload.php')) {
@@ -13,15 +14,18 @@ $settings = require('config.php');
 
 $madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);
 $madelineProto->unsetEventHandler();
-$madelineProto->async(true);
 
 EventHandler::$sources = $settings['sources'];
 EventHandler::$recipients = $settings['recipients'];
 EventHandler::$keywords = $settings['keywords'];
 EventHandler::$onlineStatus = $settings['online_status'];
 
-$madelineProto->loop(static function () use ($madelineProto) {
-    $madelineProto->setEventHandler(EventHandler::class);
-    yield $madelineProto->start();
-});
-$madelineProto->loop();
+$property = new ReflectionProperty($madelineProto, "wrapper");
+/** @var APIWrapper $wrapper */
+$wrapper = $property->getValue($madelineProto);
+$wrapper->getAPI()->setEventHandler(EventHandler::class);
+$madelineProto->start();
+
+// Await SIGINT or SIGTERM to be received.
+$signal = Amp\trapSignal([SIGINT, SIGTERM]);
+echo sprintf("Received signal %d", $signal) . PHP_EOL;

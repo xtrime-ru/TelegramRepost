@@ -3,8 +3,11 @@
 
 namespace TelegramRepost;
 
-use Amp\Loop;
 use danog\MadelineProto\Logger;
+use Revolt\EventLoop;
+use function Amp\async;
+use function Amp\Future\await;
+use function Amp\Future\awaitAll;
 use function date;
 use function json_encode;
 use function preg_match;
@@ -29,7 +32,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         $this->startTime = strtotime('-30 minute');
         foreach (self::$sources as $source) {
             try {
-                $peer = yield $this->getInfo($source);
+                $peer = $this->getInfo($source);
                 $id = $peer['bot_api_id'];
                 if (!is_int($id)) {
                     throw new \InvalidArgumentException("Cant get source peer id: {$source}");
@@ -44,7 +47,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         if (self::$onlineStatus) {
-            Loop::repeat(60, fn() => $this->account->updateStatus(['offline' => false]));
+            EventLoop::repeat(60.0, fn() => $this->account->updateStatus(['offline' => false]));
         }
 
         Logger::log('Event handler started');
@@ -72,8 +75,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
-        $peerId = yield $this->getId($update['message']['peer_id']);
-        $fromId = array_key_exists('from_id', $update['message']) ? yield $this->getId($update['message']['from_id']) : null;
+        $peerId =  $this->getId($update['message']['peer_id']);
+        $fromId = array_key_exists('from_id', $update['message']) ? $this->getId($update['message']['from_id']) : null;
         if (!empty(self::$sourcesIds) && !array_key_exists($peerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
             $this->logger('Skip forwarding message from wrong peer_id');
             return;
@@ -97,13 +100,15 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
+        $promises = [];
         foreach (static::$recipients as $peer) {
             $this->logger(date('Y-m-d H:i:s') . " forwarding message to {$peer}", Logger::WARNING);
-            $this->messages->forwardMessages([
+            $promises[] = async($this->messages->forwardMessages(...),[
                 'from_peer' => $update,
                 'id' => [$update['message']['id']],
                 'to_peer' => $peer,
             ]);
         }
+        awaitAll($promises);
     }
 }

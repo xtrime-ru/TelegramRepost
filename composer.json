@@ -5,9 +5,10 @@
   "license": "MIT",
   "keywords": ["telegram", "parser", "repost"],
   "require": {
-    "php": "~8.1.0",
+    "php": ">=8.1.0",
     "ext-json": "*",
-    "danog/madelineproto":"^7.0.59",
+    "ext-pcntl": "*",
+    "danog/madelineproto":"^v8.x-dev",
     "vlucas/phpdotenv": "^4"
   },
   "minimum-stability": "dev",
