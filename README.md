@@ -9,7 +9,7 @@ Check messages with regular expressions and forward them to selected chats/group
    sudo sh ./get-docker.sh --dry-run
    ```
 1. `git clone https://github.com/xtrime-ru/TelegramRepost.git && cd TelegramRepost`
-2. `docker-compose pull`
+2. `docker compose pull`
 3. `cp .env.example .env`
 4. Edit config `.env`:
    1. Obtain `TELEGRAM_API_ID` and `TELEGRAM_API_HASH` from https://my.telegram.org/
