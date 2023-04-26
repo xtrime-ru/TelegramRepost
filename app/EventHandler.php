@@ -31,7 +31,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     public function onStart()
     {
         $this->startTime = strtotime('-30 minute');
-        foreach (self::$sources as $source) {
+        foreach (static::$sources as $source) {
             try {
                 $peer = $this->getInfo($source);
                 $id = $peer['bot_api_id'];
@@ -43,15 +43,15 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 continue;
             }
 
-            self::$sourcesIds[$id] = null;
+            static::$sourcesIds[$id] = null;
             Logger::log("Monitoring peer: {$source}; #{$id}");
         }
 
-        if (self::$onlineStatus) {
+        if (static::$onlineStatus) {
             EventLoop::repeat(60.0, fn() => $this->account->updateStatus(['offline' => false]));
         }
 
-        foreach (self::$recipients as $peer) {
+        foreach (static::$recipients as $peer) {
             try {
                 $info = $this->getInfo($peer);
                 $id = $info['bot_api_id'];
@@ -59,6 +59,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                     throw new \InvalidArgumentException("Cant get recipient peer id: {$peer}");
                 }
                 self::$recipientsIds[] = $id;
+                Logger::log("Forwarding to peer: {$peer}; #{$id}");
             } catch (\Throwable $e) {
                 Logger::log("Cant forward messages to: {$peer}; Error: {$e->getMessage()}", Logger::ERROR);
                 continue;
