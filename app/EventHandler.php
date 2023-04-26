@@ -6,8 +6,6 @@ namespace TelegramRepost;
 use danog\MadelineProto\Logger;
 use Revolt\EventLoop;
 use function Amp\async;
-use function Amp\Future\await;
-use function Amp\Future\awaitAll;
 use function date;
 use function json_encode;
 use function preg_match;
@@ -117,15 +115,13 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
-        $promises = [];
-        foreach (static::$recipients as $peer) {
+        foreach (static::$recipientsIds as $peer) {
             $this->logger(date('Y-m-d H:i:s') . " forwarding message to {$peer}", Logger::WARNING);
-            $promises[] = async($this->messages->forwardMessages(...),[
+            async($this->messages->forwardMessages(...),[
                 'from_peer' => $update,
                 'id' => [$update['message']['id']],
                 'to_peer' => $peer,
             ]);
         }
-        awaitAll($promises);
     }
 }
