@@ -68,7 +68,6 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
         if (empty(self::$recipientsIds)  || empty(self::$sourcesIds)) {
             Logger::log("No recipients or no sources", Logger::FATAL_ERROR);
-            exit(1);
         }
 
         Logger::log('Event handler started');
