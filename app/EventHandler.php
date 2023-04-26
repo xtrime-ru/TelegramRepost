@@ -60,9 +60,13 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 }
                 self::$recipientsIds[] = $id;
             } catch (\Throwable $e) {
-                Logger::log("Cant forward messages to updates from: {$peer}; Error: {$e->getMessage()}", Logger::ERROR);
+                Logger::log("Cant forward messages to: {$peer}; Error: {$e->getMessage()}", Logger::ERROR);
                 continue;
             }
+        }
+
+        if (empty(self::$recipientsIds)  || empty(self::$sourcesIds)) {
+            throw new \Exception('No recipients or no sources');
         }
 
         Logger::log('Event handler started');
