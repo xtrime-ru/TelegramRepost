@@ -9,6 +9,7 @@ services:
   tg-repost:
     image: xtrime/telegram-api-server
     restart: unless-stopped
+    init: true
     volumes:
       - ./:/app-host-link
     working_dir: /app-host-link
