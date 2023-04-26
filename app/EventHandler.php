@@ -48,7 +48,9 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         if (static::$onlineStatus) {
-            EventLoop::repeat(60.0, fn() => $this->account->updateStatus(['offline' => false]));
+            EventLoop::repeat(60.0, function() {
+                $this->account->updateStatus(['offline' => false]);
+            });
         }
 
         foreach (static::$recipients as $peer) {
