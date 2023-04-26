@@ -12,13 +12,13 @@ Dotenv\Dotenv::createImmutable(__DIR__, '.env')->load();
 
 $settings = require('config.php');
 
-$madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);
-$madelineProto->unsetEventHandler();
-
 EventHandler::$sources = $settings['sources'];
 EventHandler::$recipients = $settings['recipients'];
 EventHandler::$keywords = $settings['keywords'];
 EventHandler::$onlineStatus = $settings['online_status'];
+
+$madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);
+$madelineProto->unsetEventHandler();
 
 $property = new ReflectionProperty($madelineProto, "wrapper");
 /** @var APIWrapper $wrapper */
