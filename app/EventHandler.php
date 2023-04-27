@@ -18,6 +18,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     public static array $recipients = [];
     /** @var string[] */
     public static array $keywords = [];
+    /** @var string[] */
+    public static array $stopWords = [];
 
     public static bool $onlineStatus = false;
 
@@ -49,7 +51,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
         if (static::$onlineStatus) {
             EventLoop::repeat(60.0, function() {
-                $this->account->updateStatus(['offline' => false]);
+                $this->account->updateStatus(offline: false);
             });
         }
 
@@ -110,6 +112,13 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         $matches = 0;
+        foreach (static::$stopWords as $stopWord) {
+            $matches += preg_match("~{$stopWord}~iuS", $update['message']['message']);
+            if ($matches > 0) {
+                return;
+            }
+        }
+
         foreach (static::$keywords as $keyword) {
             $matches += preg_match("~{$keyword}~iuS", $update['message']['message']);
             if ($matches > 0) {

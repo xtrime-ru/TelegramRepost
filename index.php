@@ -15,6 +15,7 @@ $settings = require('config.php');
 EventHandler::$sources = $settings['sources'];
 EventHandler::$recipients = $settings['recipients'];
 EventHandler::$keywords = $settings['keywords'];
+EventHandler::$stopWords = $settings['stop_words'];
 EventHandler::$onlineStatus = $settings['online_status'];
 
 $madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);

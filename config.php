@@ -16,6 +16,11 @@ $settings = [
             explode(',', getenv('KEYWORDS'))
         )
     ),
+    'stop_words' => array_filter(
+        array_map('trim',
+            explode(',', getenv('STOP_WORDS'))
+        )
+    ),
     'online_status' => (bool)getenv('ONLINE_STATUS'),
     'telegram' => [
         'app_info' => [ // obtained in https://my.telegram.org
