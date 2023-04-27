@@ -18,7 +18,6 @@ EventHandler::$keywords = $settings['keywords'];
 EventHandler::$onlineStatus = $settings['online_status'];
 
 $madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);
-$madelineProto->unsetEventHandler();
 
 $property = new ReflectionProperty($madelineProto, "wrapper");
 /** @var APIWrapper $wrapper */
