@@ -124,11 +124,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
         foreach (static::$recipientsIds as $peer) {
             $this->logger(date('Y-m-d H:i:s') . " forwarding message to {$peer}", Logger::WARNING);
-            async($this->messages->forwardMessages(...),[
-                'from_peer' => $update,
-                'id' => [$update['message']['id']],
-                'to_peer' => $peer,
-            ]);
+            $this->messages->forwardMessages(
+                from_peer: $peerId,
+                to_peer: $peer,
+                id: [$update['message']['id']],
+            );
         }
     }
 }
