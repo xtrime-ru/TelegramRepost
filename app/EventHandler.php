@@ -91,18 +91,19 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
+        $peerId =  $this->getId($update['message']['peer_id']);
+
         if ($update['message']['date'] < $this->startTime) {
             $this->logger(
-                'Skip message with date: ' . date('Y-m-d H:i:s', $update['message']['date']),
+                "Skip message {$update['message']['id']} from {$peerId} with date: " . date('Y-m-d H:i:s', $update['message']['date']),
                 Logger::WARNING
             );
             return;
         }
 
-        $peerId =  $this->getId($update['message']['peer_id']);
         $fromId = array_key_exists('from_id', $update['message']) ? $this->getId($update['message']['from_id']) : null;
         if (!empty(self::$sourcesIds) && !array_key_exists($peerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
-            $this->logger('Skip forwarding message from wrong peer_id');
+            $this->logger("Skip forwarding message {$update['message']['id']} from {$peerId} from wrong peer_id");
             return;
         }
 
@@ -111,33 +112,42 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
-        $matches = 0;
         foreach (static::$stopWords as $stopWord) {
-            $matches += preg_match("~{$stopWord}~iuS", $update['message']['message']);
-            if ($matches > 0) {
+            if (preg_match("~{$stopWord}~iuS", $update['message']['message'])) {
+                $this->logger("Skip by stop word: $stopWord", Logger::WARNING);
                 return;
             }
         }
 
+        $matches = 0;
         foreach (static::$keywords as $keyword) {
             $matches += preg_match("~{$keyword}~iuS", $update['message']['message']);
             if ($matches > 0) {
+                $this->logger("Match {$update['message']['id']} from {$peerId}  by keyword: $keyword", Logger::WARNING);
                 break;
             }
         }
 
         if (!$matches) {
-            $this->logger(date('Y-m-d H:i:s', $update['message']['date']) . ' - no matches', Logger::WARNING);
+            $this->logger("{$update['message']['id']} - no matches", Logger::WARNING);
             return;
         }
 
         foreach (static::$recipientsIds as $peer) {
-            $this->logger(date('Y-m-d H:i:s') . " forwarding message to {$peer}", Logger::WARNING);
-            $this->messages->forwardMessages(
-                from_peer: $peerId,
-                to_peer: $peer,
-                id: [$update['message']['id']],
-            );
+            async(function() use($peerId, $peer, $update, $res) {
+                $this->logger(date('Y-m-d H:i:s') . " Forwarding message {$update['message']['id']} from {$peerId}  to {$peer}", Logger::WARNING);
+                try {
+                    $this->messages->forwardMessages(
+                        from_peer: $peerId,
+                        to_peer: $peer,
+                        id: [$update['message']['id']],
+                    );
+                    $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$update['message']['id']} to {$peer}", Logger::WARNING);
+                } catch (\Throwable $e) {
+                    $this->logger($e, Logger::ERROR);
+                    $this->logger(date('Y-m-d H:i:s') . " Error while forwarding message: {$res}", Logger::ERROR);
+                }
+            });
         }
     }
 }
