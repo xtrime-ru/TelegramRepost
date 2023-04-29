@@ -21,7 +21,7 @@ $settings = [
             explode(',', getenv('STOP_WORDS'))
         )
     ),
-    'online_status' => (bool)getenv('ONLINE_STATUS'),
+    'online_status' => (bool)filter_var(getenv('ONLINE_STATUS'), FILTER_VALIDATE_BOOL),
     'telegram' => [
         'app_info' => [ // obtained in https://my.telegram.org
             'api_id' => (int)getenv('TELEGRAM_API_ID'),
@@ -30,10 +30,6 @@ $settings = [
         'logger' => [ // Logger settings
             'logger' => \danog\MadelineProto\Logger::ECHO_LOGGER, //  0 - Logs disabled, 3 - echo logs.
             'logger_level' => (int)getenv('LOGGER_LEVEL'), // Logging level, available logging levels are: ULTRA_VERBOSE - 5, VERBOSE - 4 , NOTICE - 3, WARNING - 2, ERROR - 1, FATAL_ERROR - 0.
-        ],
-        'updates' => [
-            'handle_updates' => true, // Should I handle updates?
-            'handle_old_updates' => false, // Should I handle old updates on startup?
         ],
         'connection_settings' => [
             'all' => [
@@ -45,13 +41,9 @@ $settings = [
                     'password' => getenv('TELEGRAM_PROXY_PASSWORD'),
                 ]
             ],
-            'media_socket_count' => [
-                'max' => 50
-            ]
         ],
         'serialization' => [
             'serialization_interval' => 120,
-            'cleanup_before_serialization' => true,
         ],
         'db' => [
             'type' => getenv('DB_TYPE'),
