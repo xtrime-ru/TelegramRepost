@@ -6,7 +6,7 @@ Check messages with regular expressions and forward them to selected chats/group
 0. Install docker
    ```shell
    curl -fsSL https://get.docker.com -o get-docker.sh
-   sudo sh ./get-docker.sh --dry-run
+   sudo sh ./get-docker.sh
    ```
 1. `git clone https://github.com/xtrime-ru/TelegramRepost.git && cd TelegramRepost`
 2. `docker compose pull`
