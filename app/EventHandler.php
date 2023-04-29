@@ -4,6 +4,7 @@
 namespace TelegramRepost;
 
 use danog\MadelineProto\Logger;
+use danog\MadelineProto\Db\DbArray;
 use Revolt\EventLoop;
 use function Amp\async;
 use function date;
@@ -23,31 +24,36 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
     public static bool $onlineStatus = false;
 
-    private int $startTime = 0;
+    public static bool $saveMessages = false;
+
     /** @var array<int, null> */
     private static array $sourcesIds = [];
 
     /** @var list<int> */
     private static array $recipientsIds = [];
 
-    public function onStart()
-    {
-        $this->startTime = strtotime('-30 minute');
-        foreach (static::$sources as $source) {
-            try {
-                $peer = $this->getInfo($source);
-                $id = $peer['bot_api_id'];
-                if (!is_int($id)) {
-                    throw new \InvalidArgumentException("Cant get source peer id: {$source}");
-                }
-            } catch (\Throwable $e) {
-                Logger::log("Cant monitor updates from: {$source}; Error: {$e->getMessage()}", Logger::ERROR);
-                continue;
-            }
+    protected static array $dbProperties = [
+        'messages_db' => 'array',
+        'sources_db' => 'array',
+    ];
 
-            static::$sourcesIds[$id] = null;
-            Logger::log("Monitoring peer: {$source}; #{$id}");
-        }
+    /**
+     * @var DbArray<array>
+     */
+    protected DbArray $messages_db;
+
+    /**
+     * @var DbArray<array>
+     */
+    protected DbArray $sources_db;
+
+    public function onStart(): void
+    {
+        $this->updateSources();
+        EventLoop::repeat(60.0, function() {
+            $this->updateSources();
+        });
+
 
         if (static::$onlineStatus) {
             EventLoop::repeat(60.0, function() {
@@ -77,12 +83,12 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         Logger::log('Event handler started');
     }
 
-    public function onUpdateNewChannelMessage($update)
+    public function onUpdateNewChannelMessage($update): void
     {
-        return $this->onUpdateNewMessage($update);
+        $this->onUpdateNewMessage($update);
     }
 
-    public function onUpdateNewMessage($update)
+    public function onUpdateNewMessage($update): void
     {
         $res = json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
         $this->logger('Update: ' . $res, Logger::NOTICE);
@@ -92,14 +98,6 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         $peerId =  $this->getId($update['message']['peer_id']);
-
-        if ($update['message']['date'] < $this->startTime) {
-            $this->logger(
-                "Skip message {$update['message']['id']} from {$peerId} with date: " . date('Y-m-d H:i:s', $update['message']['date']),
-                Logger::WARNING
-            );
-            return;
-        }
 
         $fromId = array_key_exists('from_id', $update['message']) ? $this->getId($update['message']['from_id']) : null;
         if (!empty(self::$sourcesIds) && !array_key_exists($peerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
@@ -133,6 +131,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
+        $this->saveMessageToDb($update);
+
         foreach (static::$recipientsIds as $peer) {
             async(function() use($peerId, $peer, $update, $res) {
                 $this->logger(date('Y-m-d H:i:s') . " Forwarding message {$update['message']['id']} from {$peerId}  to {$peer}", Logger::WARNING);
@@ -149,5 +149,45 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 }
             });
         }
+    }
+
+    private function updateSources(): void
+    {
+        $sources = array_merge(self::$sources, $this->sources_db->getArrayCopy());
+        $sourcesIds = [];
+        foreach ($sources as $source) {
+            try {
+                $peer = $this->getInfo($source);
+                $id = $peer['bot_api_id'];
+                if (!is_int($id)) {
+                    throw new \InvalidArgumentException("Cant get source peer id: {$source}");
+                }
+                $isPublicChannel = in_array($peer['type'], ['channel', 'supergroup']);
+                if ($isPublicChannel) {
+                    $this->subscribeToUpdates($id);
+                }
+            } catch (\Throwable $e) {
+                Logger::log("Cant monitor updates from: {$source}; Error: {$e->getMessage()}", Logger::ERROR);
+                continue;
+            }
+
+            $sourcesIds[$id] = null;
+            Logger::log("Monitoring peer: {$source}; #{$id}");
+        }
+
+        if ($sourcesIds !== self::$sourcesIds) {
+            self::$sourcesIds = $sourcesIds;
+        }
+    }
+
+    private function saveMessageToDb(array $update): void
+    {
+        if (!self::$saveMessages) {
+            return;
+        }
+        $timeMs = (int)(microtime(true)*1000);
+        async(function() use($update, $timeMs) {
+            $this->messages_db[$timeMs] = $update;
+        });
     }
 }

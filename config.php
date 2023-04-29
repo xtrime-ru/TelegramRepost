@@ -22,6 +22,7 @@ $settings = [
         )
     ),
     'online_status' => (bool)filter_var(getenv('ONLINE_STATUS'), FILTER_VALIDATE_BOOL),
+    'save_messages' => (bool)filter_var(getenv('SAVE_MESSAGES'), FILTER_VALIDATE_BOOL),
     'telegram' => [
         'app_info' => [ // obtained in https://my.telegram.org
             'api_id' => (int)getenv('TELEGRAM_API_ID'),

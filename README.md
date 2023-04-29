@@ -18,3 +18,16 @@ Check messages with regular expressions and forward them to selected chats/group
 6. stop container: `CTRL+C`
 7. Start containers in background: `docker compose up -d`
 8. Always restart container after .env update: `docker compose restart tg-repost`
+
+## Database
+MadelineProto uses mysql to store its session and cache. It also able to store user data.
+By default, tg-repost will start own mariadb container at root@127.0.0.1:10306. Password is empty string.
+
+Currently, all data in db is serialized.
+### Messages
+tg-repost can save all incoming messages/updates to madelineProto database.
+Enable SAVE_MESSAGES in .env. 
+Check table "$YourID_EventHandler_messages_db"
+### Sources
+You can add sources list to table "$YourID_EventHandler_sources_db". 
+tg-repost will check this table every 60 seconds and update list of listening channels.

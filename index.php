@@ -17,6 +17,7 @@ EventHandler::$recipients = $settings['recipients'];
 EventHandler::$keywords = $settings['keywords'];
 EventHandler::$stopWords = $settings['stop_words'];
 EventHandler::$onlineStatus = $settings['online_status'];
+EventHandler::$saveMessages = $settings['save_messages'];
 
 $madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);
 
