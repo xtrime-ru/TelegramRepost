@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b33d4e35394c42e822065fed0d2933de",
+    "content-hash": "b4e391e3b333f53470e967539ebd60e1",
     "packages": [
         {
             "name": "amphp/amp",
@@ -2108,16 +2108,16 @@
         },
         {
             "name": "danog/madelineproto",
-            "version": "v8.x-dev",
+            "version": "dev-v8_save_updates_to_db",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/MadelineProto.git",
-                "reference": "8e12707948a09e04dde7847efdb6467bd814e55e"
+                "reference": "c48ffcba0a3e0415af6f185df2b2a13ae240976f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/8e12707948a09e04dde7847efdb6467bd814e55e",
-                "reference": "8e12707948a09e04dde7847efdb6467bd814e55e",
+                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/c48ffcba0a3e0415af6f185df2b2a13ae240976f",
+                "reference": "c48ffcba0a3e0415af6f185df2b2a13ae240976f",
                 "shasum": ""
             },
             "require": {
@@ -2180,7 +2180,6 @@
                 "ext-pdo": "Install the pdo extension to store session data on MySQL or PostgreSQL",
                 "ext-primemodule": "Install the primemodule and FFI extensions to speed up MadelineProto (https://prime.madelineproto.xyz)"
             },
-            "default-branch": true,
             "type": "project",
             "extra": {
                 "phabel": {
@@ -2224,7 +2223,7 @@
             ],
             "support": {
                 "issues": "https://github.com/danog/MadelineProto/issues",
-                "source": "https://github.com/danog/MadelineProto/tree/v8"
+                "source": "https://github.com/danog/MadelineProto/tree/v8_save_updates_to_db"
             },
             "funding": [
                 {
@@ -2232,7 +2231,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-04-27T13:55:10+00:00"
+            "time": "2023-04-30T19:51:15+00:00"
         },
         {
             "name": "danog/primemodule",

@@ -44,7 +44,7 @@ $settings = [
             ],
         ],
         'serialization' => [
-            'serialization_interval' => 120,
+            'serialization_interval' => 60,
         ],
         'db' => [
             'type' => getenv('DB_TYPE'),

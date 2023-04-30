@@ -33,8 +33,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     private static array $recipientsIds = [];
 
     protected static array $dbProperties = [
-        'messages_db' => 'array',
-        'sources_db' => 'array',
+        'messages_db' => 'json',
+        'sources_db' => 'string',
     ];
 
     /**
@@ -185,7 +185,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         if (!self::$saveMessages) {
             return;
         }
-        $timeMs = (int)(microtime(true)*1000);
+        $timeMs = (int)(microtime(true)*1000*1000);
         async(function() use($update, $timeMs) {
             $this->messages_db[$timeMs] = $update;
         });
