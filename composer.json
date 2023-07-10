@@ -8,7 +8,7 @@
     "php": ">=8.1.0",
     "ext-json": "*",
     "ext-pcntl": "*",
-    "danog/madelineproto":"dev-v8_save_updates_to_db",
+    "danog/madelineproto":"v8.x-dev",
     "vlucas/phpdotenv": "^4"
   },
   "minimum-stability": "dev",

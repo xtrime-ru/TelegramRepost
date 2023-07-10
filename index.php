@@ -20,11 +20,11 @@ EventHandler::$onlineStatus = $settings['online_status'];
 EventHandler::$saveMessages = $settings['save_messages'];
 
 $madelineProto = new danog\MadelineProto\API('session/session.madeline', $settings['telegram']);
+$madelineProto->start();
 $property = new ReflectionProperty($madelineProto, "wrapper");
 /** @var APIWrapper $wrapper */
 $wrapper = $property->getValue($madelineProto);
 $wrapper->getAPI()->setEventHandler(EventHandler::class);
-$madelineProto->start();
 
 // Await SIGINT or SIGTERM to be received.
 $signal = Amp\trapSignal([SIGINT, SIGTERM]);

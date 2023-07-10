@@ -5,6 +5,7 @@ namespace TelegramRepost;
 
 use danog\MadelineProto\Logger;
 use danog\MadelineProto\Db\DbArray;
+use danog\MadelineProto\Settings\Database\SerializerType;
 use Revolt\EventLoop;
 use function Amp\async;
 use function date;
@@ -33,8 +34,14 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     private static array $recipientsIds = [];
 
     protected static array $dbProperties = [
-        'messages_db' => 'json',
-        'sources_db' => 'string',
+        'messages_db' => [
+            'serializer' => SerializerType::JSON,
+            'enableCache' =>  false,
+        ],
+        'sources_db' => [
+            'serializer' => SerializerType::STRING,
+            'enableCache' =>  false,
+        ],
     ];
 
     /**
@@ -105,7 +112,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
-        if (empty($update['message']['message'])) {
+        if (!empty(static::$keywords) && empty($update['message']['message'])) {
             $this->logger('Skip empty message');
             return;
         }
