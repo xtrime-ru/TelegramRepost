@@ -124,18 +124,20 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             }
         }
 
-        $matches = 0;
-        foreach (static::$keywords as $keyword) {
-            $matches += preg_match("~{$keyword}~iuS", $update['message']['message']);
-            if ($matches > 0) {
-                $this->logger("Match {$update['message']['id']} from {$peerId}  by keyword: $keyword", Logger::WARNING);
-                break;
+        if (static::$keywords) {
+            $matches = 0;
+            foreach (static::$keywords as $keyword) {
+                $matches += preg_match("~{$keyword}~iuS", $update['message']['message']);
+                if ($matches > 0) {
+                    $this->logger("Match {$update['message']['id']} from {$peerId}  by keyword: $keyword", Logger::WARNING);
+                    break;
+                }
             }
-        }
 
-        if (!$matches) {
-            $this->logger("{$update['message']['id']} - no matches", Logger::WARNING);
-            return;
+            if (!$matches) {
+                $this->logger("{$update['message']['id']} - no matches", Logger::WARNING);
+                return;
+            }
         }
 
         $this->saveMessageToDb($update);
