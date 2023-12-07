@@ -7,7 +7,6 @@ use danog\MadelineProto\Logger;
 use danog\MadelineProto\Db\DbArray;
 use danog\MadelineProto\Settings\Database\SerializerType;
 use Revolt\EventLoop;
-use function Amp\async;
 use function date;
 use function json_encode;
 use function preg_match;
@@ -143,20 +142,18 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         $this->saveMessageToDb($update);
 
         foreach (static::$recipientsIds as $peer) {
-            async(function() use($peerId, $peer, $update, $res) {
-                $this->logger(date('Y-m-d H:i:s') . " Forwarding message {$update['message']['id']} from {$peerId}  to {$peer}", Logger::WARNING);
-                try {
-                    $this->messages->forwardMessages(
-                        from_peer: $peerId,
-                        to_peer: $peer,
-                        id: [$update['message']['id']],
-                    );
-                    $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$update['message']['id']} to {$peer}", Logger::WARNING);
-                } catch (\Throwable $e) {
-                    $this->logger($e, Logger::ERROR);
-                    $this->logger(date('Y-m-d H:i:s') . " Error while forwarding message: {$res}", Logger::ERROR);
-                }
-            });
+            $this->logger(date('Y-m-d H:i:s') . " Forwarding message {$update['message']['id']} from {$peerId}  to {$peer}", Logger::WARNING);
+            try {
+                $this->messages->forwardMessages(
+                    from_peer: $peerId,
+                    to_peer: $peer,
+                    id: [$update['message']['id']],
+                );
+                $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$update['message']['id']} to {$peer}", Logger::WARNING);
+            } catch (\Throwable $e) {
+                $this->logger($e, Logger::ERROR);
+                $this->logger(date('Y-m-d H:i:s') . " Error while forwarding message: {$res}", Logger::ERROR);
+            }
         }
     }
 
@@ -195,8 +192,6 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
         $timeMs = (int)(microtime(true)*1000*1000);
-        async(function() use($update, $timeMs) {
-            $this->messages_db[$timeMs] = $update;
-        });
+        $this->messages_db[$timeMs] = $update;
     }
 }
