@@ -29,50 +29,39 @@ $settings = [
             'api_hash' => (string)getenv('TELEGRAM_API_HASH'),
         ],
         'logger' => [ // Logger settings
-            'logger' => \danog\MadelineProto\Logger::ECHO_LOGGER, //  0 - Logs disabled, 3 - echo logs.
-            'logger_level' => (int)getenv('LOGGER_LEVEL'), // Logging level, available logging levels are: ULTRA_VERBOSE - 5, VERBOSE - 4 , NOTICE - 3, WARNING - 2, ERROR - 1, FATAL_ERROR - 0.
+            'type' => \danog\MadelineProto\Logger::ECHO_LOGGER, //  0 - Logs disabled, 3 - echo logs.
+            'level' => (int)getenv('LOGGER_LEVEL'), // Logging level, available logging levels are: ULTRA_VERBOSE - 5, VERBOSE - 4 , NOTICE - 3, WARNING - 2, ERROR - 1, FATAL_ERROR - 0.
         ],
-        'flood_timeout' => [
-            'wait_if_lt' => 5,
+        'rpc' => [
+            'flood_timeout' => 5,
+            'rpc_drop_timeout' => 11,
         ],
-        'connection_settings' => [
-            'all' => [
-                'drop_timeout' => 10,
-                'proxy' => '\SocksProxy',
-                'proxy_extra' => [
-                    'address' => (string)getenv('TELEGRAM_PROXY_ADDRESS'),
-                    'port' => (int)getenv('TELEGRAM_PROXY_PORT'),
-                    'username' => getenv('TELEGRAM_PROXY_USERNAME'),
-                    'password' => getenv('TELEGRAM_PROXY_PASSWORD'),
-                ]
-            ],
+        'connection' => [
+            'max_media_socket_count' => 10
         ],
         'serialization' => [
-            'serialization_interval' => 60,
+            'interval' => 600,
         ],
         'db' => [
-            'type' => getenv('DB_TYPE'),
+            'enable_min_db' => (bool)filter_var((string)getenv('DB_ENABLE_MIN_DATABASE'), FILTER_VALIDATE_BOOL),
+            'enable_file_reference_db' => (bool)filter_var((string)getenv('DB_ENABLE_FILE_REFERENCE_DATABASE'), FILTER_VALIDATE_BOOL),
+            'type' => (string)getenv('DB_TYPE'),
             getenv('DB_TYPE') => [
-                'host' => (string)getenv('DB_HOST'),
-                'port' => (int)getenv('DB_PORT'),
-                'user' => getenv('DB_USER'),
-                'password' => getenv('DB_PASSWORD'),
-                'database' => getenv('DB_DATABASE'),
+                'uri' => 'tcp://' . getenv('DB_HOST') . ':' . (int)getenv('DB_PORT'),
+                'username' => (string)getenv('DB_USER'),
+                'password' => (string)getenv('DB_PASSWORD'),
+                'database' => (string)getenv('DB_DATABASE'),
                 'max_connections' => (int)getenv('DB_MAX_CONNECTIONS'),
                 'idle_timeout' => (int)getenv('DB_IDLE_TIMEOUT'),
-                'cache_ttl' => getenv('DB_CACHE_TTL'),
+                'cache_ttl' => (string)getenv('DB_CACHE_TTL'),
+                'serializer' => danog\MadelineProto\Settings\Database\SerializerType::from('serialize'),
             ]
         ],
-        'download' => [
+        'files' => [
             'report_broken_media' => false,
         ],
     ],
 ];
-
-if (empty($settings['telegram']['connection_settings']['all']['proxy_extra']['address'])) {
-    $settings['telegram']['connection_settings']['all']['proxy'] = '\Socket';
-    $settings['telegram']['connection_settings']['all']['proxy_extra'] = [];
-}
 
 if (empty($settings['telegram']['app_info']['api_id'])) {
     throw new InvalidArgumentException('Need to fill TELEGRAM_API_ID AND HASH in .env');
