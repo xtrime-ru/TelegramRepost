@@ -10,6 +10,15 @@ if (!is_file(__DIR__ . '/vendor/autoload.php')) {
 }
 require_once __DIR__ . '/vendor/autoload.php';
 
+$shortopts = 's::';
+$longopts = [
+    'session::', //префикс session файла
+];
+$options = getopt($shortopts, $longopts);
+$options = [
+    'session' => (string)($options['session'] ?? $options['s'] ?? 'session'),
+];
+
 Dotenv\Dotenv::createImmutable(__DIR__, '.env')->load();
 
 $settings = require('config.php');
@@ -56,7 +65,7 @@ function getSettingsFromArray(string $session, array $settings, SettingsAbstract
     return $settingsObject;
 }
 
-$madelineProto = new danog\MadelineProto\API('session/session.madeline', getSettingsFromArray('session', $settings['telegram']));
+$madelineProto = new danog\MadelineProto\API("session/{$options['session']}.madeline", getSettingsFromArray($options['session'], $settings['telegram']));
 $madelineProto->start();
 $property = new ReflectionProperty($madelineProto, "wrapper");
 /** @var APIWrapper $wrapper */

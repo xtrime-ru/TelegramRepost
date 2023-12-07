@@ -18,6 +18,8 @@ services:
     environment:
       WAIT_HOSTS: mysql:3306
     logging: *default-logging
+    command:
+      - "-s=session"
   mysql:
     image: mariadb:11.0
     restart: unless-stopped
