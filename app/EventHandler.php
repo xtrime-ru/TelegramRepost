@@ -10,6 +10,7 @@ use danog\AsyncOrm\Serializer\Json;
 use danog\AsyncOrm\ValueType;
 use danog\MadelineProto\Logger;
 use Revolt\EventLoop;
+use function Amp\File\write;
 use function date;
 use function json_encode;
 use function preg_match;
@@ -55,6 +56,9 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 $this->account->updateStatus(offline: false);
             });
         }
+
+        $this->healthcheck();
+        EventLoop::repeat(60.0, $this->healthcheck(...));
 
         foreach (static::$recipients as $peer) {
             try {
@@ -182,5 +186,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
         $timeMs = (int)(microtime(true)*1000*1000);
         $this->messagesDb[$timeMs] = $update;
+    }
+
+    private function healthcheck(): void
+    {
+        $self = $this->fullGetSelf();
+        write('/root/.healthcheck', json_encode($self));
     }
 }

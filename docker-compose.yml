@@ -13,6 +13,11 @@ services:
     volumes:
       - ./:/app-host-link
     working_dir: /app-host-link
+    healthcheck:
+      test: ./healthcheck.sh 120
+      interval: 60s
+      timeout: 2s
+      retries: 1
     depends_on:
       - mysql
     environment:
