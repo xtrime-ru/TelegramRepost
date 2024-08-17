@@ -2,6 +2,7 @@
 
 use danog\MadelineProto\APIWrapper;
 use danog\MadelineProto\Settings;
+use danog\MadelineProto\Settings\Database\SerializerType;
 use danog\MadelineProto\SettingsAbstract;
 use TelegramRepost\EventHandler;
 
@@ -32,7 +33,7 @@ EventHandler::$saveMessages = $settings['save_messages'];
 
 function getSettingsFromArray(string $session, array $settings, SettingsAbstract $settingsObject = new Settings()): SettingsAbstract {
     foreach ($settings as $key => $value) {
-        if (is_array($value)) {
+        if (\is_array($value) && $key !== 'proxies') {
             if ($key === 'db' && isset($value['type'])) {
                 $type = match ($value['type']) {
                     'memory' => new Settings\Database\Memory(),
@@ -50,15 +51,18 @@ function getSettingsFromArray(string $session, array $settings, SettingsAbstract
                 }
 
                 unset($value[$value['type']], $value['type'],);
-                if (count($value) === 0) {
+                if (\count($value) === 0) {
                     continue;
                 }
             }
 
-            $method = 'get' . ucfirst(str_replace('_', '', ucwords($key, '_')));
+            $method = 'get' . \ucfirst(\str_replace('_', '', \ucwords($key, '_')));
             getSettingsFromArray($session, $value, $settingsObject->$method());
         } else {
-            $method = 'set' . ucfirst(str_replace('_', '', ucwords($key, '_')));
+            if ($key === 'serializer' && \is_string($value)) {
+                $value = SerializerType::from($value);
+            }
+            $method = 'set' . \ucfirst(\str_replace('_', '', \ucwords($key, '_')));
             $settingsObject->$method($value);
         }
     }
@@ -66,6 +70,7 @@ function getSettingsFromArray(string $session, array $settings, SettingsAbstract
 }
 
 $madelineProto = new danog\MadelineProto\API("session/{$options['session']}.madeline", getSettingsFromArray($options['session'], $settings['telegram']));
+EventHandler::cachePlugins(EventHandler::class);
 $madelineProto->start();
 $property = new ReflectionProperty($madelineProto, "wrapper");
 /** @var APIWrapper $wrapper */

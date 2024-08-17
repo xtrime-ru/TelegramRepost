@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types = 1);
 
 
 namespace TelegramRepost;
 
+use danog\AsyncOrm\Annotations\OrmMappedArray;
+use danog\AsyncOrm\DbArray;
+use danog\AsyncOrm\KeyType;
+use danog\AsyncOrm\ValueType;
 use danog\MadelineProto\Logger;
-use danog\MadelineProto\Db\DbArray;
-use danog\MadelineProto\Settings\Database\SerializerType;
 use Revolt\EventLoop;
 use function date;
 use function json_encode;
@@ -32,26 +34,12 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     /** @var list<int> */
     private static array $recipientsIds = [];
 
-    protected static array $dbProperties = [
-        'messages_db' => [
-            'serializer' => SerializerType::JSON,
-            'enableCache' =>  false,
-        ],
-        'sources_db' => [
-            'serializer' => SerializerType::STRING,
-            'enableCache' =>  false,
-        ],
-    ];
+    #[OrmMappedArray(keyType: KeyType::INT, valueType:ValueType::SCALAR, cacheTtl: 0)]
+    protected DbArray $messagesDb;
 
-    /**
-     * @var DbArray<array>
-     */
-    protected DbArray $messages_db;
+    #[OrmMappedArray(keyType: KeyType::INT, valueType: ValueType::STRING, cacheTtl: 0)]
+    protected DbArray $sourcesDb;
 
-    /**
-     * @var DbArray<array>
-     */
-    protected DbArray $sources_db;
 
     public function onStart(): void
     {
@@ -159,7 +147,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
     private function updateSources(): void
     {
-        $sources = array_merge(self::$sources, $this->sources_db->getArrayCopy());
+        $sources = array_merge(self::$sources, $this->sourcesDb->getArrayCopy());
         $sourcesIds = [];
         foreach ($sources as $source) {
             try {
@@ -192,6 +180,6 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
         $timeMs = (int)(microtime(true)*1000*1000);
-        $this->messages_db[$timeMs] = $update;
+        $this->messagesDb[$timeMs] =  json_encode($update, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
     }
 }

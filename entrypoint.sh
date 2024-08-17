@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-docker-compose-wait \
-&& nice -n 20 php index.php "$@"
+composer install \
+&& docker-compose-wait \
+&& nice -n 19 php index.php "$@"

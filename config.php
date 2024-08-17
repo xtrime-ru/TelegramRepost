@@ -54,8 +54,11 @@ $settings = [
                 'max_connections' => (int)getenv('DB_MAX_CONNECTIONS'),
                 'idle_timeout' => (int)getenv('DB_IDLE_TIMEOUT'),
                 'cache_ttl' => (string)getenv('DB_CACHE_TTL'),
-                'serializer' => danog\MadelineProto\Settings\Database\SerializerType::from('serialize'),
+                'serializer' => (string)getenv('DB_SERIALIZER'),
             ]
+        ],
+        'metrics' => [
+            'enable_prometheus_collection' => false,
         ],
         'files' => [
             'report_broken_media' => false,
