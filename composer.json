@@ -9,6 +9,7 @@
     "ext-json": "*",
     "ext-pcntl": "*",
     "danog/madelineproto":"dev-v8_fix_cleanup",
+    "danog/async-orm": "dev-custom-serializers as 1.9.9",
     "vlucas/phpdotenv": "^4"
   },
   "minimum-stability": "dev",

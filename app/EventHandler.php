@@ -6,6 +6,7 @@ namespace TelegramRepost;
 use danog\AsyncOrm\Annotations\OrmMappedArray;
 use danog\AsyncOrm\DbArray;
 use danog\AsyncOrm\KeyType;
+use danog\AsyncOrm\Serializer\Json;
 use danog\AsyncOrm\ValueType;
 use danog\MadelineProto\Logger;
 use Revolt\EventLoop;
@@ -34,7 +35,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     /** @var list<int> */
     private static array $recipientsIds = [];
 
-    #[OrmMappedArray(keyType: KeyType::INT, valueType:ValueType::SCALAR, cacheTtl: 0)]
+    #[OrmMappedArray(keyType: KeyType::INT, valueType:ValueType::SCALAR, cacheTtl: 0, serializer: new Json())]
     protected DbArray $messagesDb;
 
     #[OrmMappedArray(keyType: KeyType::INT, valueType: ValueType::STRING, cacheTtl: 0)]
@@ -180,6 +181,6 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
         $timeMs = (int)(microtime(true)*1000*1000);
-        $this->messagesDb[$timeMs] =  json_encode($update, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        $this->messagesDb[$timeMs] = $update;
     }
 }

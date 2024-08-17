@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a7f43c5eae6706f6a45cfbb141ce1f0",
+    "content-hash": "c5976b3c0b1c250299325f78df5fbe4a",
     "packages": [
         {
             "name": "amphp/amp",
@@ -1985,16 +1985,16 @@
         },
         {
             "name": "danog/async-orm",
-            "version": "1.0.2",
+            "version": "dev-custom-serializers",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/AsyncOrm.git",
-                "reference": "8c1ea3e04ebdb3030ce0771ad3c1d922127a8e53"
+                "reference": "c53fc12a84433ff6a553be7bf5f8327366921b2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/AsyncOrm/zipball/8c1ea3e04ebdb3030ce0771ad3c1d922127a8e53",
-                "reference": "8c1ea3e04ebdb3030ce0771ad3c1d922127a8e53",
+                "url": "https://api.github.com/repos/danog/AsyncOrm/zipball/c53fc12a84433ff6a553be7bf5f8327366921b2f",
+                "reference": "c53fc12a84433ff6a553be7bf5f8327366921b2f",
                 "shasum": ""
             },
             "require": {
@@ -2037,7 +2037,7 @@
             "description": "Async ORM based on AMPHP v3 and fibers.",
             "support": {
                 "issues": "https://github.com/danog/AsyncOrm/issues",
-                "source": "https://github.com/danog/AsyncOrm/tree/1.0.2"
+                "source": "https://github.com/danog/AsyncOrm/tree/custom-serializers"
             },
             "funding": [
                 {
@@ -2045,7 +2045,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-07T18:25:49+00:00"
+            "time": "2024-08-17T19:36:54+00:00"
         },
         {
             "name": "danog/better-prometheus",
@@ -4198,10 +4198,18 @@
         }
     ],
     "packages-dev": [],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "danog/async-orm",
+            "version": "dev-custom-serializers",
+            "alias": "1.9.9",
+            "alias_normalized": "1.9.9.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "danog/madelineproto": 20
+        "danog/madelineproto": 20,
+        "danog/async-orm": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
