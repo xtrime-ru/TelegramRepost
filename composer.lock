@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5976b3c0b1c250299325f78df5fbe4a",
+    "content-hash": "b9ba6bb1b44be29b5efba4785d15155b",
     "packages": [
         {
             "name": "amphp/amp",
@@ -1985,16 +1985,16 @@
         },
         {
             "name": "danog/async-orm",
-            "version": "dev-custom-serializers",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/AsyncOrm.git",
-                "reference": "c53fc12a84433ff6a553be7bf5f8327366921b2f"
+                "reference": "1a5129adeab04a4949b74289b4acfbc8a773bdc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/AsyncOrm/zipball/c53fc12a84433ff6a553be7bf5f8327366921b2f",
-                "reference": "c53fc12a84433ff6a553be7bf5f8327366921b2f",
+                "url": "https://api.github.com/repos/danog/AsyncOrm/zipball/1a5129adeab04a4949b74289b4acfbc8a773bdc0",
+                "reference": "1a5129adeab04a4949b74289b4acfbc8a773bdc0",
                 "shasum": ""
             },
             "require": {
@@ -2037,7 +2037,7 @@
             "description": "Async ORM based on AMPHP v3 and fibers.",
             "support": {
                 "issues": "https://github.com/danog/AsyncOrm/issues",
-                "source": "https://github.com/danog/AsyncOrm/tree/custom-serializers"
+                "source": "https://github.com/danog/AsyncOrm/tree/1.1.0"
             },
             "funding": [
                 {
@@ -2045,7 +2045,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-17T19:36:54+00:00"
+            "time": "2024-09-24T16:49:13+00:00"
         },
         {
             "name": "danog/better-prometheus",
@@ -2380,23 +2380,23 @@
         },
         {
             "name": "danog/madelineproto",
-            "version": "dev-v8_fix_cleanup",
+            "version": "dev-v8-tas",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/MadelineProto.git",
-                "reference": "d07a17a4430dc71b2d413eedd41c799912d82554"
+                "reference": "99449a5cdf2c2a88518c013357c3a3bd07cc7363"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/d07a17a4430dc71b2d413eedd41c799912d82554",
-                "reference": "d07a17a4430dc71b2d413eedd41c799912d82554",
+                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/99449a5cdf2c2a88518c013357c3a3bd07cc7363",
+                "reference": "99449a5cdf2c2a88518c013357c3a3bd07cc7363",
                 "shasum": ""
             },
             "require": {
                 "amphp/amp": "^3.0.2",
                 "amphp/byte-stream": "^2.1.1",
-                "amphp/dns": "^2.1.2",
-                "amphp/file": "^3.1.0",
+                "amphp/dns": "^2.2.0",
+                "amphp/file": "^3.1.1",
                 "amphp/http": "^2.1.1",
                 "amphp/http-client": "^5.1.0",
                 "amphp/http-client-cookies": "^2",
@@ -2404,7 +2404,7 @@
                 "amphp/log": "^2",
                 "amphp/mysql": "^3",
                 "amphp/postgres": "^2",
-                "amphp/redis": "^2",
+                "amphp/redis": "^2.0.1",
                 "amphp/socket": "^2.3.1",
                 "amphp/websocket-client": "^2",
                 "bacon/bacon-qr-code": "^3",
@@ -2415,7 +2415,7 @@
                 "danog/loop": "^1.1.1",
                 "danog/primemodule": "^1.0.13",
                 "danog/telegram-entities": "^1.0.4",
-                "danog/tg-dialog-id": "^1.0.1",
+                "danog/tg-dialog-id": "^1.1.0",
                 "danog/tg-file-decoder": "^1.0.1",
                 "ext-dom": "*",
                 "ext-fileinfo": "*",
@@ -2425,9 +2425,9 @@
                 "ext-xml": "*",
                 "ext-zlib": "*",
                 "league/uri": "^7.4.1",
-                "nikic/php-parser": "^5.0.2",
+                "nikic/php-parser": "^5.1.0",
                 "php-64bit": ">=8.2",
-                "phpseclib/phpseclib": "^3.0.37",
+                "phpseclib/phpseclib": "^3.0.41",
                 "psr/http-factory": "^1.1.0",
                 "psr/log": "^3",
                 "revolt/event-loop": "^1.0.6",
@@ -2445,9 +2445,9 @@
                 "danog/phpdoc": "^0.1.24",
                 "dg/bypass-finals": "dev-master",
                 "ext-ctype": "*",
-                "phpunit/phpunit": "^9.6.19",
+                "phpunit/phpunit": "^9.6.20",
                 "revolt/event-loop-adapter-react": "^1.1.1",
-                "symfony/yaml": "^6.4.7",
+                "symfony/yaml": "^6.4.8",
                 "vimeo/psalm": "dev-master"
             },
             "suggest": {
@@ -2496,7 +2496,7 @@
             ],
             "support": {
                 "issues": "https://github.com/danog/MadelineProto/issues",
-                "source": "https://github.com/danog/MadelineProto/tree/v8_fix_cleanup"
+                "source": "https://github.com/danog/MadelineProto/tree/v8-tas"
             },
             "funding": [
                 {
@@ -2504,7 +2504,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-11T17:21:30+00:00"
+            "time": "2024-09-24T15:52:32+00:00"
         },
         {
             "name": "danog/primemodule",
@@ -3241,16 +3241,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.1.0",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "683130c2ff8c2739f4822ff7ac5c873ec529abd1"
+                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/683130c2ff8c2739f4822ff7ac5c873ec529abd1",
-                "reference": "683130c2ff8c2739f4822ff7ac5c873ec529abd1",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
+                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
                 "shasum": ""
             },
             "require": {
@@ -3293,9 +3293,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.1.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.2.0"
             },
-            "time": "2024-07-01T20:03:41+00:00"
+            "time": "2024-09-15T16:40:33+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -3491,16 +3491,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.41",
+            "version": "3.0.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "621c73f7dcb310b61de34d1da4c4204e8ace6ceb"
+                "reference": "db92f1b1987b12b13f248fe76c3a52cadb67bb98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/621c73f7dcb310b61de34d1da4c4204e8ace6ceb",
-                "reference": "621c73f7dcb310b61de34d1da4c4204e8ace6ceb",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/db92f1b1987b12b13f248fe76c3a52cadb67bb98",
+                "reference": "db92f1b1987b12b13f248fe76c3a52cadb67bb98",
                 "shasum": ""
             },
             "require": {
@@ -3581,7 +3581,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.41"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.42"
             },
             "funding": [
                 {
@@ -3597,7 +3597,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-12T00:13:54+00:00"
+            "time": "2024-09-16T03:06:04+00:00"
         },
         {
             "name": "promphp/prometheus_client_php",
@@ -3777,16 +3777,16 @@
         },
         {
             "name": "psr/log",
-            "version": "3.0.0",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001"
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe5ea303b0887d5caefd3d431c3e61ad47037001",
-                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
                 "shasum": ""
             },
             "require": {
@@ -3821,9 +3821,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/3.0.0"
+                "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
-            "time": "2021-07-14T16:46:02+00:00"
+            "time": "2024-09-11T13:17:53+00:00"
         },
         {
             "name": "revolt/event-loop",
@@ -3899,20 +3899,20 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.30.0",
+            "version": "v1.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "0424dff1c58f028c451efff2045f5d92410bd540"
+                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/0424dff1c58f028c451efff2045f5d92410bd540",
-                "reference": "0424dff1c58f028c451efff2045f5d92410bd540",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/a3cc8b044a6ea513310cbd48ef7333b384945638",
+                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "provide": {
                 "ext-ctype": "*"
@@ -3958,7 +3958,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.30.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -3974,24 +3974,24 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-31T15:07:36+00:00"
+            "time": "2024-09-09T11:45:10+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.30.0",
+            "version": "v1.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "fd22ab50000ef01661e2a31d850ebaa297f8e03c"
+                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fd22ab50000ef01661e2a31d850ebaa297f8e03c",
-                "reference": "fd22ab50000ef01661e2a31d850ebaa297f8e03c",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/85181ba99b2345b0ef10ce42ecac37612d9fd341",
+                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "provide": {
                 "ext-mbstring": "*"
@@ -4038,7 +4038,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.30.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -4054,7 +4054,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-19T12:30:46+00:00"
+            "time": "2024-09-09T11:45:10+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -4198,18 +4198,10 @@
         }
     ],
     "packages-dev": [],
-    "aliases": [
-        {
-            "package": "danog/async-orm",
-            "version": "dev-custom-serializers",
-            "alias": "1.9.9",
-            "alias_normalized": "1.9.9.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "danog/madelineproto": 20,
-        "danog/async-orm": 20
+        "danog/madelineproto": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
