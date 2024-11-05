@@ -28,8 +28,11 @@ EventHandler::$sources = $settings['sources'];
 EventHandler::$recipients = $settings['recipients'];
 EventHandler::$keywords = $settings['keywords'];
 EventHandler::$stopWords = $settings['stop_words'];
+EventHandler::$repostMessages = $settings['repost_messages'];
 EventHandler::$onlineStatus = $settings['online_status'];
 EventHandler::$saveMessages = $settings['save_messages'];
+EventHandler::$sendLinks = $settings['send_links'];
+EventHandler::$duplicatesTTL = $settings['duplicates_ttl'];
 
 function getSettingsFromArray(string $session, array $settings, SettingsAbstract $settingsObject = new Settings()): SettingsAbstract {
     foreach ($settings as $key => $value) {
@@ -69,6 +72,11 @@ function getSettingsFromArray(string $session, array $settings, SettingsAbstract
     return $settingsObject;
 }
 
+foreach (glob("session/*/*ipc") as $file) {
+    printf("removing: %s\n", $file);
+    unlink($file);
+}
+
 $madelineProto = new danog\MadelineProto\API("session/{$options['session']}.madeline", getSettingsFromArray($options['session'], $settings['telegram']));
 EventHandler::cachePlugins(EventHandler::class);
 $madelineProto->start();
@@ -81,4 +89,4 @@ if (!$wrapper->getAPI()->getEventHandler() instanceof EventHandler) {
 
 // Await SIGINT or SIGTERM to be received.
 $signal = Amp\trapSignal([SIGINT, SIGTERM]);
-echo sprintf("Received signal %d", $signal) . PHP_EOL;
+printf("Received signal %d %s", $signal, PHP_EOL);

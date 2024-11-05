@@ -9,6 +9,7 @@ use danog\AsyncOrm\KeyType;
 use danog\AsyncOrm\Serializer\Json;
 use danog\AsyncOrm\ValueType;
 use danog\MadelineProto\Logger;
+use danog\MadelineProto\ParseMode;
 use Revolt\EventLoop;
 use function Amp\File\write;
 use function date;
@@ -26,15 +27,23 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     /** @var string[] */
     public static array $stopWords = [];
 
+    public static bool $repostMessages = true;
+
     public static bool $onlineStatus = false;
 
     public static bool $saveMessages = false;
+
+    public static bool $sendLinks = false;
+
+    public static int $duplicatesTTL = 0;
 
     /** @var array<int, null> */
     private static array $sourcesIds = [];
 
     /** @var list<int> */
     private static array $recipientsIds = [];
+
+    private array $sentMessages = [];
 
     #[OrmMappedArray(keyType: KeyType::INT, valueType:ValueType::SCALAR, cacheTtl: 0, serializer: new Json())]
     protected DbArray $messagesDb;
@@ -48,6 +57,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         $this->updateSources();
         EventLoop::repeat(60.0, function() {
             $this->updateSources();
+            $this->clearDuplicates();
         });
 
 
@@ -96,11 +106,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             return;
         }
 
-        $peerId =  $this->getId($update['message']['peer_id']);
+        $sourcePeerId =  $this->getId($update['message']['peer_id']);
 
         $fromId = array_key_exists('from_id', $update['message']) ? $this->getId($update['message']['from_id']) : null;
-        if (!empty(self::$sourcesIds) && !array_key_exists($peerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
-            $this->logger("Skip forwarding message {$update['message']['id']} from {$peerId} from wrong peer_id");
+        if (!empty(self::$sourcesIds) && !array_key_exists($sourcePeerId, self::$sourcesIds) && !array_key_exists($fromId, self::$sourcesIds)) {
+            $this->logger("Skip forwarding message {$update['message']['id']} from {$sourcePeerId} from wrong peer_id");
             return;
         }
 
@@ -121,7 +131,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             foreach (static::$keywords as $keyword) {
                 $matches += preg_match("~{$keyword}~iuS", $update['message']['message']);
                 if ($matches > 0) {
-                    $this->logger("Match {$update['message']['id']} from {$peerId}  by keyword: $keyword", Logger::WARNING);
+                    $this->logger("Match {$update['message']['id']} from {$sourcePeerId}  by keyword: $keyword", Logger::WARNING);
                     break;
                 }
             }
@@ -134,19 +144,13 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
         $this->saveMessageToDb($update);
 
-        foreach (static::$recipientsIds as $peer) {
-            $this->logger(date('Y-m-d H:i:s') . " Forwarding message {$update['message']['id']} from {$peerId}  to {$peer}", Logger::WARNING);
-            try {
-                $this->messages->forwardMessages(
-                    from_peer: $peerId,
-                    to_peer: $peer,
-                    id: [$update['message']['id']],
-                );
-                $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$update['message']['id']} to {$peer}", Logger::WARNING);
-            } catch (\Throwable $e) {
-                $this->logger($e, Logger::ERROR);
-                $this->logger(date('Y-m-d H:i:s') . " Error while forwarding message: {$res}", Logger::ERROR);
-            }
+
+        if ($fromId !== null && $this->isDuplicate($fromId, $update['message']['message'])) {
+            return;
+        }
+
+        foreach (static::$recipientsIds as $targetPeerId) {
+            $this->processMessages($update['message']['id'], $sourcePeerId, $targetPeerId, $update['message']['message'], $res);
         }
     }
 
@@ -184,7 +188,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         if (!self::$saveMessages) {
             return;
         }
-        $timeMs = (int)(microtime(true)*1000*1000);
+        $timeMs = (int)(microtime(true)*1000.*1000.);
         $this->messagesDb[$timeMs] = $update;
     }
 
@@ -192,5 +196,77 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     {
         $self = $this->fullGetSelf();
         write('/root/.healthcheck', json_encode($self));
+    }
+
+    private function processMessages($id, int $sourcePeerId, int $targetPeerId, string $text, bool|string $res): void
+    {
+        $this->logger(date('Y-m-d H:i:s') . " Forwarding message {$id} from {$sourcePeerId}  to {$targetPeerId}", Logger::WARNING);
+        try {
+            $sourcePeerId = (string)$sourcePeerId;
+            $fromChannel = str_starts_with($sourcePeerId, '-100');
+
+            if (self::$repostMessages || (self::$sendLinks && !$fromChannel)) {
+                $this->messages->forwardMessages(
+                    from_peer: $sourcePeerId,
+                    to_peer: $targetPeerId,
+                    id: [$id],
+                );
+                $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$id} to {$targetPeerId}", Logger::WARNING);
+            }
+
+            if (self::$sendLinks && $fromChannel) {
+                $trimmedText = mb_strimwidth($text, 0, 100, '...');
+                $sourcePeerId = str_replace('-100', '', $sourcePeerId);
+                $this->messages->sendMessage(
+                    peer: $targetPeerId,
+                    parse_mode: ParseMode::HTML,
+                    message: <<<HTML
+                        Link to message: <a href="https://t.me/c/$sourcePeerId/$id">https://t.me/c/$sourcePeerId/$id</a>
+                        Text:
+                        $trimmedText
+                        HTML,
+                );
+                $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$id} to {$targetPeerId}", Logger::WARNING);
+            }
+        } catch (\Throwable $e) {
+            $this->logger($e, Logger::ERROR);
+            $this->logger(date('Y-m-d H:i:s') . " Error while forwarding message: {$res}", Logger::ERROR);
+        }
+    }
+
+    private function clearDuplicates(): void
+    {
+        if (self::$duplicatesTTL === 0) {
+            return;
+        }
+
+        $actualMessages = [];
+        foreach ($this->sentMessages as $authorId => $messages) {
+            foreach ($messages as $hash => $time) {
+                if ($time + self::$duplicatesTTL >= time()) {
+                    $actualMessages[$authorId][$hash] = $time;
+                }
+            }
+        }
+
+        //Fix memory leaks in hashmap
+        $this->sentMessages = $actualMessages;
+    }
+
+    private function isDuplicate(int $authorId, string $messageText): bool
+    {
+        if (self::$duplicatesTTL === 0) {
+            return false;
+        }
+
+        $messageHash = md5($messageText);
+        if (!empty($this->sentMessages[$authorId][$messageHash])) {
+            $this->logger("Duplicate message; author id:  {$authorId}", Logger::WARNING);
+            $this->sentMessages[$authorId][$messageHash] = time();
+            return true;
+        } else {
+            $this->sentMessages[$authorId][$messageHash] = time();
+        }
+        return false;
     }
 }

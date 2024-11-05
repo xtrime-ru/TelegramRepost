@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9ba6bb1b44be29b5efba4785d15155b",
+    "content-hash": "55e7cbe983c0248a38e7302be5022f7a",
     "packages": [
         {
             "name": "amphp/amp",
@@ -953,16 +953,16 @@
         },
         {
             "name": "amphp/parallel",
-            "version": "v2.2.9",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/parallel.git",
-                "reference": "73d293f1fc4df1bebc3c4fce1432e82dd7032238"
+                "reference": "9777db1460d1535bc2a843840684fb1205225b87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/parallel/zipball/73d293f1fc4df1bebc3c4fce1432e82dd7032238",
-                "reference": "73d293f1fc4df1bebc3c4fce1432e82dd7032238",
+                "url": "https://api.github.com/repos/amphp/parallel/zipball/9777db1460d1535bc2a843840684fb1205225b87",
+                "reference": "9777db1460d1535bc2a843840684fb1205225b87",
                 "shasum": ""
             },
             "require": {
@@ -1025,7 +1025,7 @@
             ],
             "support": {
                 "issues": "https://github.com/amphp/parallel/issues",
-                "source": "https://github.com/amphp/parallel/tree/v2.2.9"
+                "source": "https://github.com/amphp/parallel/tree/v2.3.0"
             },
             "funding": [
                 {
@@ -1033,7 +1033,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-24T18:27:44+00:00"
+            "time": "2024-09-14T19:16:14+00:00"
         },
         {
             "name": "amphp/parser",
@@ -1166,16 +1166,16 @@
         },
         {
             "name": "amphp/postgres",
-            "version": "v2.0.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/postgres.git",
-                "reference": "4fffbb2087e40ccaf779acdb27ca021d8718308d"
+                "reference": "48ee97e6899427f68d66c6319b778507e5f1abea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/postgres/zipball/4fffbb2087e40ccaf779acdb27ca021d8718308d",
-                "reference": "4fffbb2087e40ccaf779acdb27ca021d8718308d",
+                "url": "https://api.github.com/repos/amphp/postgres/zipball/48ee97e6899427f68d66c6319b778507e5f1abea",
+                "reference": "48ee97e6899427f68d66c6319b778507e5f1abea",
                 "shasum": ""
             },
             "require": {
@@ -1226,7 +1226,7 @@
             ],
             "support": {
                 "issues": "https://github.com/amphp/postgres/issues",
-                "source": "https://github.com/amphp/postgres/tree/v2.0.0"
+                "source": "https://github.com/amphp/postgres/tree/v2.1.0"
             },
             "funding": [
                 {
@@ -1234,7 +1234,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-10T17:02:44+00:00"
+            "time": "2024-10-11T02:41:50+00:00"
         },
         {
             "name": "amphp/process",
@@ -1583,16 +1583,16 @@
         },
         {
             "name": "amphp/sql-common",
-            "version": "v2.0.0",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/sql-common.git",
-                "reference": "996b8ad67410a20f0df0e2315a174b4c58f21e1a"
+                "reference": "069183d57f17f85c60842ea3a8ce5ff52dba5399"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/sql-common/zipball/996b8ad67410a20f0df0e2315a174b4c58f21e1a",
-                "reference": "996b8ad67410a20f0df0e2315a174b4c58f21e1a",
+                "url": "https://api.github.com/repos/amphp/sql-common/zipball/069183d57f17f85c60842ea3a8ce5ff52dba5399",
+                "reference": "069183d57f17f85c60842ea3a8ce5ff52dba5399",
                 "shasum": ""
             },
             "require": {
@@ -1627,7 +1627,7 @@
             ],
             "support": {
                 "issues": "https://github.com/amphp/sql-common/issues",
-                "source": "https://github.com/amphp/sql-common/tree/v2.0.0"
+                "source": "https://github.com/amphp/sql-common/tree/v2.0.2"
             },
             "funding": [
                 {
@@ -1635,7 +1635,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-10T15:22:18+00:00"
+            "time": "2024-10-27T16:04:14+00:00"
         },
         {
             "name": "amphp/sync",
@@ -1714,16 +1714,16 @@
         },
         {
             "name": "amphp/websocket",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/websocket.git",
-                "reference": "1dc9d2c3b9b10965510d2762181254d825098419"
+                "reference": "963904b6a883c4b62d9222d1d9749814fac96a3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/websocket/zipball/1dc9d2c3b9b10965510d2762181254d825098419",
-                "reference": "1dc9d2c3b9b10965510d2762181254d825098419",
+                "url": "https://api.github.com/repos/amphp/websocket/zipball/963904b6a883c4b62d9222d1d9749814fac96a3b",
+                "reference": "963904b6a883c4b62d9222d1d9749814fac96a3b",
                 "shasum": ""
             },
             "require": {
@@ -1783,7 +1783,7 @@
             ],
             "support": {
                 "issues": "https://github.com/amphp/websocket/issues",
-                "source": "https://github.com/amphp/websocket/tree/v2.0.3"
+                "source": "https://github.com/amphp/websocket/tree/v2.0.4"
             },
             "funding": [
                 {
@@ -1791,7 +1791,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-28T23:16:28+00:00"
+            "time": "2024-10-28T21:28:45+00:00"
         },
         {
             "name": "amphp/websocket-client",
@@ -1931,16 +1931,16 @@
         },
         {
             "name": "bacon/bacon-qr-code",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bacon/BaconQrCode.git",
-                "reference": "510de6eca6248d77d31b339d62437cc995e2fb41"
+                "reference": "f9cc1f52b5a463062251d666761178dbdb6b544f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/510de6eca6248d77d31b339d62437cc995e2fb41",
-                "reference": "510de6eca6248d77d31b339d62437cc995e2fb41",
+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/f9cc1f52b5a463062251d666761178dbdb6b544f",
+                "reference": "f9cc1f52b5a463062251d666761178dbdb6b544f",
                 "shasum": ""
             },
             "require": {
@@ -1979,9 +1979,9 @@
             "homepage": "https://github.com/Bacon/BaconQrCode",
             "support": {
                 "issues": "https://github.com/Bacon/BaconQrCode/issues",
-                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.0.0"
+                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.0.1"
             },
-            "time": "2024-04-18T11:16:25+00:00"
+            "time": "2024-10-01T13:55:55+00:00"
         },
         {
             "name": "danog/async-orm",
@@ -2384,12 +2384,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/danog/MadelineProto.git",
-                "reference": "99449a5cdf2c2a88518c013357c3a3bd07cc7363"
+                "reference": "ba4853bb34d210e4427da07c76f9733fccea51cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/99449a5cdf2c2a88518c013357c3a3bd07cc7363",
-                "reference": "99449a5cdf2c2a88518c013357c3a3bd07cc7363",
+                "url": "https://api.github.com/repos/danog/MadelineProto/zipball/ba4853bb34d210e4427da07c76f9733fccea51cd",
+                "reference": "ba4853bb34d210e4427da07c76f9733fccea51cd",
                 "shasum": ""
             },
             "require": {
@@ -2408,7 +2408,7 @@
                 "amphp/socket": "^2.3.1",
                 "amphp/websocket-client": "^2",
                 "bacon/bacon-qr-code": "^3",
-                "danog/async-orm": "^1.0.2",
+                "danog/async-orm": "^1.1.0",
                 "danog/better-prometheus": "^0.1.1",
                 "danog/dns-over-https": "^1",
                 "danog/ipc": "^1",
@@ -2425,11 +2425,11 @@
                 "ext-xml": "*",
                 "ext-zlib": "*",
                 "league/uri": "^7.4.1",
-                "nikic/php-parser": "^5.1.0",
+                "nikic/php-parser": "^5.2.0",
                 "php-64bit": ">=8.2",
-                "phpseclib/phpseclib": "^3.0.41",
+                "phpseclib/phpseclib": "^3.0.42",
                 "psr/http-factory": "^1.1.0",
-                "psr/log": "^3",
+                "psr/log": "^3.0.2",
                 "revolt/event-loop": "^1.0.6",
                 "symfony/polyfill-mbstring": "*",
                 "webmozart/assert": "^1.11"
@@ -2445,9 +2445,9 @@
                 "danog/phpdoc": "^0.1.24",
                 "dg/bypass-finals": "dev-master",
                 "ext-ctype": "*",
-                "phpunit/phpunit": "^9.6.20",
+                "phpunit/phpunit": "^9.6.21",
                 "revolt/event-loop-adapter-react": "^1.1.1",
-                "symfony/yaml": "^6.4.8",
+                "symfony/yaml": "^6.4.12",
                 "vimeo/psalm": "dev-master"
             },
             "suggest": {
@@ -2504,7 +2504,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-24T15:52:32+00:00"
+            "time": "2024-10-31T10:27:25+00:00"
         },
         {
             "name": "danog/primemodule",
@@ -3241,16 +3241,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.2.0",
+            "version": "v5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb"
+                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
-                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/8eea230464783aa9671db8eea6f8c6ac5285794b",
+                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b",
                 "shasum": ""
             },
             "require": {
@@ -3293,9 +3293,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.2.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.3.1"
             },
-            "time": "2024-09-15T16:40:33+00:00"
+            "time": "2024-10-08T18:51:32+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -3601,16 +3601,16 @@
         },
         {
             "name": "promphp/prometheus_client_php",
-            "version": "v2.11.0",
+            "version": "v2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PromPHP/prometheus_client_php.git",
-                "reference": "35d5a68628ea18209938bc1b8796646015ab93cf"
+                "reference": "50b70a6df4017081917e004f177a3c01cc8115db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PromPHP/prometheus_client_php/zipball/35d5a68628ea18209938bc1b8796646015ab93cf",
-                "reference": "35d5a68628ea18209938bc1b8796646015ab93cf",
+                "url": "https://api.github.com/repos/PromPHP/prometheus_client_php/zipball/50b70a6df4017081917e004f177a3c01cc8115db",
+                "reference": "50b70a6df4017081917e004f177a3c01cc8115db",
                 "shasum": ""
             },
             "require": {
@@ -3663,9 +3663,9 @@
             "description": "Prometheus instrumentation library for PHP applications.",
             "support": {
                 "issues": "https://github.com/PromPHP/prometheus_client_php/issues",
-                "source": "https://github.com/PromPHP/prometheus_client_php/tree/v2.11.0"
+                "source": "https://github.com/PromPHP/prometheus_client_php/tree/v2.12.0"
             },
-            "time": "2024-08-05T07:58:08+00:00"
+            "time": "2024-10-18T07:33:22+00:00"
         },
         {
             "name": "psr/http-factory",

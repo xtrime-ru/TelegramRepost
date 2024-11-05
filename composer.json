@@ -8,6 +8,7 @@
     "php": ">=8.1.0",
     "ext-json": "*",
     "ext-pcntl": "*",
+    "ext-mbstring": "*",
     "danog/madelineproto":"dev-v8-tas",
     "danog/async-orm": "^1.1",
     "vlucas/phpdotenv": "^4"

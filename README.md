@@ -23,9 +23,8 @@ Check messages with regular expressions and forward them to selected chats/group
 MadelineProto uses mysql to store its session and cache. It also able to store user data.
 By default, tg-repost will start own mariadb container at root@127.0.0.1:10306. Password is empty string.
 
-Currently, all data in db is serialized.
 ### Messages
-tg-repost can save all incoming messages/updates to madelineProto database.
+tg-repost can save all incoming messages/updates to madelineProto database in json format.
 Enable SAVE_MESSAGES in .env. 
 Check table "$YourID_EventHandler_messages_db"
 ### Sources
