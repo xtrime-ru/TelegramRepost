@@ -7,7 +7,7 @@ x-logging:
 
 services:
   tg-repost:
-    image: xtrime/telegram-api-server
+    image: xtrime/telegram-api-server:2
     restart: unless-stopped
     init: true
     volumes:
