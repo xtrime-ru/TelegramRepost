@@ -205,26 +205,37 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             $sourcePeerId = (string)$sourcePeerId;
             $fromChannel = str_starts_with($sourcePeerId, '-100');
 
+            $originalSent = false;
             if (self::$repostMessages || (self::$sendLinks && !$fromChannel)) {
                 $this->messages->forwardMessages(
                     from_peer: $sourcePeerId,
                     to_peer: $targetPeerId,
                     id: [$id],
                 );
+                $originalSent = true;
                 $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$id} to {$targetPeerId}", Logger::WARNING);
             }
 
             if (self::$sendLinks && $fromChannel) {
-                $trimmedText = mb_strimwidth($text, 0, 100, '...');
                 $sourcePeerId = str_replace('-100', '', $sourcePeerId);
-                $this->messages->sendMessage(
-                    peer: $targetPeerId,
-                    parse_mode: ParseMode::HTML,
-                    message: <<<HTML
+                if ($originalSent) {
+                    $message = <<<HTML
+                        <a href="https://t.me/c/$sourcePeerId/$id">https://t.me/c/$sourcePeerId/$id</a>
+                        HTML
+                    ;
+                } else {
+                    $trimmedText = mb_strimwidth($text, 0, 100, '...');
+                    $message = <<<HTML
                         Link to message: <a href="https://t.me/c/$sourcePeerId/$id">https://t.me/c/$sourcePeerId/$id</a>
                         Text:
                         $trimmedText
-                        HTML,
+                        HTML
+                    ;
+                }
+                $this->messages->sendMessage(
+                    peer: $targetPeerId,
+                    parse_mode: ParseMode::HTML,
+                    message: $message,
                 );
                 $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$id} to {$targetPeerId}", Logger::WARNING);
             }
