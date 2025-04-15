@@ -20,7 +20,7 @@ $options = [
     'session' => (string)($options['session'] ?? $options['s'] ?? 'session'),
 ];
 
-Dotenv\Dotenv::createImmutable(__DIR__, '.env')->load();
+Dotenv\Dotenv::createUnsafeImmutable(__DIR__, '.env')->load();
 
 $settings = require('config.php');
 

@@ -11,7 +11,7 @@
     "ext-mbstring": "*",
     "danog/madelineproto":"dev-v8-tas",
     "danog/async-orm": "^1.1",
-    "vlucas/phpdotenv": "^4"
+    "vlucas/phpdotenv": "^5"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
