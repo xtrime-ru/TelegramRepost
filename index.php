@@ -76,6 +76,12 @@ foreach (glob("session/*/*ipc") as $file) {
     printf("removing: %s\n", $file);
     unlink($file);
 }
+if ((string)getenv('DB_TYPE') !== 'memory') {
+    foreach (glob("session/safe.php*") as $file) {
+        printf("removing: %s\n", $file);
+        unlink($file);
+    }
+}
 
 $madelineProto = new danog\MadelineProto\API("session/{$options['session']}.madeline", getSettingsFromArray($options['session'], $settings['telegram']));
 EventHandler::cachePlugins(EventHandler::class);
