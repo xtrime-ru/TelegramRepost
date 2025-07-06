@@ -1,6 +1,7 @@
 <?php
 
 use danog\MadelineProto\APIWrapper;
+use danog\MadelineProto\Magic;
 use danog\MadelineProto\Settings;
 use danog\MadelineProto\Settings\Database\SerializerType;
 use danog\MadelineProto\SettingsAbstract;
@@ -33,6 +34,7 @@ EventHandler::$onlineStatus = $settings['online_status'];
 EventHandler::$saveMessages = $settings['save_messages'];
 EventHandler::$sendLinks = $settings['send_links'];
 EventHandler::$duplicatesTTL = $settings['duplicates_ttl'];
+EventHandler::$maxTextSimilarity = $settings['duplicates_similarity'];
 
 function getSettingsFromArray(string $session, array $settings, SettingsAbstract $settingsObject = new Settings()): SettingsAbstract {
     foreach ($settings as $key => $value) {
@@ -82,6 +84,9 @@ if ((string)getenv('DB_TYPE') !== 'memory') {
         unlink($file);
     }
 }
+
+\define('MADELINE_WORKER_TYPE', 'madeline-ipc');
+Magic::$isIpcWorker = true;
 
 $madelineProto = new danog\MadelineProto\API("session/{$options['session']}.madeline", getSettingsFromArray($options['session'], $settings['telegram']));
 EventHandler::cachePlugins(EventHandler::class);
