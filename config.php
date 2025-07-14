@@ -25,6 +25,7 @@ $settings = [
     'save_messages' => (bool)filter_var(getenv('SAVE_MESSAGES'), FILTER_VALIDATE_BOOL),
     'repost_messages' => (bool)filter_var(getenv('REPOST_MESSAGES') ?: 'true', FILTER_VALIDATE_BOOL),
     'send_links' => (bool)filter_var(getenv('SEND_LINKS'), FILTER_VALIDATE_BOOL),
+    'lang' => getenv('LANG') ?? 'en',
     'duplicates_ttl' => abs(time() - (int)strtotime((string)getenv('DUPLICATES_WINDOW') ?: '+5 seconds')),
     'duplicates_similarity' => (float)(getenv('DUPLICATES_SIMILARITY') ?: '1.0'),
     'telegram' => [
@@ -78,6 +79,10 @@ foreach ($_ENV as $name => $value) {
     if (str_contains($name, 'MADELINE')) {
         define($name, $value);
     }
+}
+
+if (!in_array($settings['lang'], ['ru', 'en'], true)) {
+    throw new InvalidArgumentException('Only ru and en languages are supported');
 }
 
 return $settings;

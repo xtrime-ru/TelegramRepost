@@ -12,7 +12,6 @@ use danog\AsyncOrm\ValueType;
 use danog\MadelineProto\Logger;
 use danog\MadelineProto\ParseMode;
 use Revolt\EventLoop;
-use SplDoublyLinkedList;
 use function Amp\File\write;
 use function date;
 use function json_encode;
@@ -40,6 +39,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     public static int $duplicatesTTL = 0;
 
     public static float $maxTextSimilarity = 0.5;
+    public static string $lang;
 
     /** @var array<int, null> */
     private static array $sourcesIds = [];
@@ -225,23 +225,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 $sourceLink = $usernameSource ? "https://t.me/$usernameSource/$firstId" : "https://t.me/c/$sourcePeerId/$firstId";
                 $userLink = $usernameAuthor ? "https://t.me/$usernameAuthor" : "[no username]";
                 if ($originalSent) {
-                    $message = <<<HTML
-                        Group Name: $title
-                        Link: <a href="$sourceLink">$sourceLink</a>
-                        User: $userLink
-                        HTML
-                    ;
+                    $message = $this->getMessage($title, $sourceLink, $userLink);
                 } else {
                     $text = implode(PHP_EOL, array_column($messages, 'message'));
-                    $trimmedText = mb_strimwidth($text, 0, 100, '...');
-                    $message = <<<HTML
-                        Group Name: $title
-                        Link: <a href="$sourceLink">$sourceLink</a>
-                        User: $userLink
-                        Text:
-                            <blockquote expandable>$trimmedText</blockquote>
-                        HTML
-                    ;
+                    $trimmedText = mb_strimwidth($text, 0, 1000, '...');
+                    $message = $this->getMessage($title, $sourceLink, $userLink, $trimmedText);
                 }
                 $this->messages->sendMessage(
                     peer: $targetPeerId,
@@ -323,5 +311,42 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         $info = $info[array_key_first($info)];
 
         return $info['title'] ?? null;
+    }
+
+    private function getMessage(?string $title, string $sourceLink, string $userLink, ?string $trimmedText = null): string
+    {
+
+        switch (self::$lang) {
+            case 'ru':
+                $translationsName = 'Имя группы';
+                $translationsLink = 'Ссылка на сообщение';
+                $translationsUser = 'Пользователь';
+                $translationsText = 'Текст';
+                break;
+            case 'en':
+                $translationsName = 'Group Name';
+                $translationsLink = 'Link to message';
+                $translationsUser = 'User';
+                $translationsText = 'Text';
+                break;
+            default:
+                throw new \InvalidArgumentException('Unknown language');
+        }
+
+        $message = <<<HTML
+            <b>$translationsName:</b> $title
+            <b>$translationsLink</b>: <a href="$sourceLink">$sourceLink</a>
+            <b>$translationsUser:</b> $userLink
+            HTML
+        ;
+        if ($trimmedText) {
+            $message .= <<<HTML
+                <b>$translationsText:</b>
+                    <blockquote expandable>$trimmedText</blockquote>
+                HTML
+            ;
+
+        }
+        return $message;
     }
 }

@@ -35,6 +35,7 @@ EventHandler::$saveMessages = $settings['save_messages'];
 EventHandler::$sendLinks = $settings['send_links'];
 EventHandler::$duplicatesTTL = $settings['duplicates_ttl'];
 EventHandler::$maxTextSimilarity = $settings['duplicates_similarity'];
+EventHandler::$lang = $settings['lang'];
 
 function getSettingsFromArray(string $session, array $settings, SettingsAbstract $settingsObject = new Settings()): SettingsAbstract {
     foreach ($settings as $key => $value) {
