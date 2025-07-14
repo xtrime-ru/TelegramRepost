@@ -128,7 +128,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
         $chatId =  $this->getId($update['message']['peer_id']);
 
-        $authorId = array_key_exists('from_id', $update['message']) ? $this->getId($update['message']['from_id']) : $chatId;
+        if (!empty($update['message']['from_id']) || !empty($update['message']['fwd_from']['from_id'])) {
+            $authorId = $this->getId($update['message']['from_id'] ?? $update['message']['fwd_from']['from_id']);
+        } else {
+            $authorId = $chatId;
+        }
 
         if (!empty(self::$sourcesIds) && !array_key_exists($chatId, self::$sourcesIds) && !array_key_exists($authorId, self::$sourcesIds)) {
             $this->logger("Skip forwarding message {$update['message']['id']} from {$chatId} from wrong peer_id");
@@ -196,6 +200,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
         try {
             $sourcePeerId = (string)$sourcePeerId;
+            $usernameSource = $this->getUsername($sourcePeerId);
+            $usernameAuthor = $this->getUsername($messages[0]['from_id'] ?? $messages[0]['fwd_from']['from_id']);
             $fromChannel = str_starts_with($sourcePeerId, '-100');
             $ids = array_column($messages, 'id');
 
@@ -211,20 +217,29 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             }
 
             if (self::$sendLinks && $fromChannel) {
+                $title = $this->getTitle($sourcePeerId);
+
                 $sourcePeerId = str_replace('-100', '', $sourcePeerId);
                 $firstId = reset($ids);
+
+                $sourceLink = $usernameSource ? "https://t.me/$usernameSource/$firstId" : "https://t.me/c/$sourcePeerId/$firstId";
+                $userLink = $usernameAuthor ? "https://t.me/$usernameAuthor" : "[no username]";
                 if ($originalSent) {
                     $message = <<<HTML
-                        <a href="https://t.me/c/$sourcePeerId/$firstId">https://t.me/c/$sourcePeerId/$firstId</a>
+                        Group Name: $title
+                        Link: <a href="$sourceLink">$sourceLink</a>
+                        User: $userLink
                         HTML
                     ;
                 } else {
                     $text = implode(PHP_EOL, array_column($messages, 'message'));
                     $trimmedText = mb_strimwidth($text, 0, 100, '...');
                     $message = <<<HTML
-                        Link to message: <a href="https://t.me/c/$sourcePeerId/$firstId">https://t.me/c/$sourcePeerId/$firstId</a>
+                        Group Name: $title
+                        Link: <a href="$sourceLink">$sourceLink</a>
+                        User: $userLink
                         Text:
-                        $trimmedText
+                            <blockquote expandable>$trimmedText</blockquote>
                         HTML
                     ;
                 }
@@ -292,5 +307,21 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             }
         }
 
+    }
+
+    private function getUsername(string|int $id): string|null
+    {
+        $info = $this->getInfo($id);
+        $info = $info[array_key_first($info)];
+
+        return $info['username'] ?? $info['usernames'][0]['username'] ?? null;
+    }
+
+    private function getTitle(string|int $id): string|null
+    {
+        $info = $this->getInfo($id);
+        $info = $info[array_key_first($info)];
+
+        return $info['title'] ?? null;
     }
 }
