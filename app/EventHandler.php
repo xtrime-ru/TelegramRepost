@@ -201,7 +201,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         try {
             $sourcePeerId = (string)$sourcePeerId;
             $usernameSource = $this->getUsername($sourcePeerId);
-            $usernameAuthor = $this->getUsername($messages[0]['from_id'] ?? $messages[0]['fwd_from']['from_id']);
+            $usernameAuthor = $this->getUsername($messages[0]['from_id'] ?? $messages[0]['fwd_from']['from_id'] ?? null);
             $fromChannel = str_starts_with($sourcePeerId, '-100');
             $ids = array_column($messages, 'id');
 
@@ -297,8 +297,11 @@ class EventHandler extends \danog\MadelineProto\EventHandler
 
     }
 
-    private function getUsername(string|int $id): string|null
+    private function getUsername(string|int|null $id): string|null
     {
+        if (!$id) {
+            return null;
+        }
         $info = $this->getInfo($id);
         $info = $info[array_key_first($info)];
 
