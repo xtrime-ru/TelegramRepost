@@ -223,18 +223,18 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                 $firstId = reset($ids);
 
                 $sourceLink = $usernameSource ? "https://t.me/$usernameSource/$firstId" : "https://t.me/c/$sourcePeerId/$firstId";
-                $userLink = $usernameAuthor ? "https://t.me/$usernameAuthor" : "[no username]";
                 if ($originalSent) {
-                    $message = $this->getMessage($title, $sourceLink, $userLink);
+                    $message = $this->getMessage($title, $sourceLink, $usernameAuthor);
                 } else {
                     $text = implode(PHP_EOL, array_column($messages, 'message'));
                     $trimmedText = mb_strimwidth($text, 0, 1000, '...');
-                    $message = $this->getMessage($title, $sourceLink, $userLink, $trimmedText);
+                    $message = $this->getMessage($title, $sourceLink, $usernameAuthor, $trimmedText);
                 }
                 $this->messages->sendMessage(
                     peer: $targetPeerId,
                     parse_mode: ParseMode::HTML,
                     message: $message,
+                    no_webpage: true,
                 );
                 $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$firstId} to {$targetPeerId}", Logger::WARNING);
             }
@@ -313,19 +313,17 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         return $info['title'] ?? null;
     }
 
-    private function getMessage(?string $title, string $sourceLink, string $userLink, ?string $trimmedText = null): string
+    private function getMessage(?string $title, string $sourceLink, ?string $username = null, ?string $trimmedText = null): string
     {
 
         switch (self::$lang) {
             case 'ru':
-                $translationsName = 'Имя группы';
-                $translationsLink = 'Ссылка на сообщение';
+                $translationsName = 'Группа';
                 $translationsUser = 'Пользователь';
                 $translationsText = 'Текст';
                 break;
             case 'en':
-                $translationsName = 'Group Name';
-                $translationsLink = 'Link to message';
+                $translationsName = 'Group';
                 $translationsUser = 'User';
                 $translationsText = 'Text';
                 break;
@@ -334,19 +332,26 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         }
 
         $message = <<<HTML
-            <b>$translationsName:</b> $title
-            <b>$translationsLink</b>: <a href="$sourceLink">$sourceLink</a>
-            <b>$translationsUser:</b> $userLink
+            <b>$translationsName:</b> <a href="$sourceLink">$title</a>
             HTML
         ;
+        if ($username) {
+            $message .= <<<HTML
+                
+                <b>$translationsUser:</b> <a href="https://t.me/$username">$username</a>
+                HTML
+            ;
+        }
         if ($trimmedText) {
             $message .= <<<HTML
+                
                 <b>$translationsText:</b>
                     <blockquote expandable>$trimmedText</blockquote>
                 HTML
             ;
 
         }
+
         return $message;
     }
 }
