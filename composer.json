@@ -4,6 +4,12 @@
   "type": "project",
   "license": "MIT",
   "keywords": ["telegram", "parser", "repost"],
+  "repositories": [
+    {
+      "type": "github",
+      "url": "https://github.com/xtrime-ru/MadelineProto.git"
+    }
+  ],
   "require": {
     "php": ">=8.1.0",
     "ext-json": "*",
