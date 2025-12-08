@@ -47,6 +47,9 @@ class EventHandler extends \danog\MadelineProto\EventHandler
     /** @var list<int> */
     private static array $recipientsIds = [];
 
+    /** @var array<int, int> */
+    private static array $recipientsTopics = [];
+
     /** @var array<int, MessagesByAuthor>  */
     private array $messageAccumulators;
 
@@ -81,6 +84,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         EventLoop::repeat(60.0, $this->healthcheck(...));
 
         foreach (static::$recipients as $peer) {
+            [$peer, $topic]  = sscanf($peer, '%[^/]/%i');
+
             try {
                 $info = $this->getInfo($peer);
                 $id = $info['bot_api_id'];
@@ -88,7 +93,10 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                     throw new \InvalidArgumentException("Cant get recipient peer id: {$peer}");
                 }
                 self::$recipientsIds[] = $id;
-                Logger::log("Forwarding to peer: {$peer}; #{$id}");
+                if ($topic !== null) {
+                    static::$recipientsTopics[$peer] = $topic;
+                }
+                Logger::log("Forwarding to peer: {$peer}; topic: $topic;  #{$id}");
             } catch (\Throwable $e) {
                 Logger::log("Cant forward messages to: {$peer}; Error: {$e->getMessage()}", Logger::ERROR);
                 continue;
@@ -193,7 +201,7 @@ class EventHandler extends \danog\MadelineProto\EventHandler
         write('/root/.healthcheck', json_encode($self));
     }
 
-    private function repostMessages(array $messages, int $sourcePeerId, int $targetPeerId): void
+    private function repostMessages(array $messages, int $sourcePeerId, int $targetPeerId, ?int $topicId = null): void
     {
         static $mutex = new LocalKeyedMutex();
         $lock = $mutex->acquire((string)$targetPeerId);
@@ -209,8 +217,9 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             if (self::$repostMessages || (self::$sendLinks && !$fromChannel)) {
                 $this->messages->forwardMessages(
                     from_peer: $sourcePeerId,
-                    to_peer: $targetPeerId,
                     id: $ids,
+                    to_peer: $targetPeerId,
+                    top_msg_id: $topicId,
                 );
                 $originalSent = true;
                 $this->logger(date('Y-m-d H:i:s') . " Sent successfully: to {$targetPeerId}", Logger::WARNING);
@@ -230,12 +239,19 @@ class EventHandler extends \danog\MadelineProto\EventHandler
                     $trimmedText = mb_strimwidth($text, 0, 1000, '...');
                     $message = $this->getMessage($title, $sourceLink, $usernameAuthor, $trimmedText);
                 }
-                $this->messages->sendMessage(
-                    peer: $targetPeerId,
-                    parse_mode: ParseMode::HTML,
-                    message: $message,
-                    no_webpage: true,
-                );
+                $params = [
+                    'peer' => $targetPeerId,
+                    'parse_mode' =>  ParseMode::HTML,
+                    'message' => $message,
+                    'no_webpage' => true,
+                ];
+                if ($topicId !== null) {
+                    $params['reply_to'] = [
+                        '_' => 'inputReplyToMessage',
+                        'reply_to_msg_id' => $topicId,
+                    ];
+                }
+                $this->messages->sendMessage(...$params);
                 $this->logger(date('Y-m-d H:i:s') . " Sent successfully: {$firstId} to {$targetPeerId}", Logger::WARNING);
             }
         } catch (\Throwable $e) {
@@ -291,7 +307,8 @@ class EventHandler extends \danog\MadelineProto\EventHandler
             }
 
             foreach (static::$recipientsIds as $targetPeerId) {
-                $this->repostMessages($messages, $chatId, $targetPeerId);
+                $topicId = static::$recipientsTopics[$targetPeerId] ?? null;
+                $this->repostMessages($messages, $chatId, $targetPeerId, $topicId);
             }
         }
 
